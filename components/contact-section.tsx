@@ -1,42 +1,185 @@
 "use client"
 
-import { motion } from "framer-motion"
-import { useInView } from "framer-motion"
-import { useRef } from "react"
-import { Mail, Phone, MapPin, Github, Linkedin, Send, ExternalLink } from "lucide-react"
+import { useState, useRef } from "react"
+import { motion, useInView, AnimatePresence } from "framer-motion"
+import emailjs from "@emailjs/browser"
+import {
+  Mail,
+  Phone,
+  MapPin,
+  Github,
+  Linkedin,
+  Send,
+  ExternalLink,
+  CheckCircle,
+  AlertCircle,
+  Loader2,
+} from "lucide-react"
 
+// ─── EmailJS config ──────────────────────────────────────────────────────────
+// Replace these three values with your own EmailJS credentials:
+//   Service ID  → https://dashboard.emailjs.com/admin
+//   Template ID → https://dashboard.emailjs.com/admin/templates
+//   Public Key  → https://dashboard.emailjs.com/admin/account
+const EMAILJS_SERVICE_ID  = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID  ?? "YOUR_SERVICE_ID"
+const EMAILJS_TEMPLATE_ID = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID ?? "YOUR_TEMPLATE_ID"
+const EMAILJS_PUBLIC_KEY  = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY  ?? "YOUR_PUBLIC_KEY"
+
+// ─── Types ────────────────────────────────────────────────────────────────────
+type Status = "idle" | "loading" | "success" | "error"
+
+interface FormFields {
+  from_name: string
+  from_email: string
+  subject: string
+  message: string
+}
+
+const EMPTY_FORM: FormFields = {
+  from_name: "",
+  from_email: "",
+  subject: "",
+  message: "",
+}
+
+// ─── Input component ──────────────────────────────────────────────────────────
+function Field({
+  label,
+  id,
+  error,
+  children,
+}: {
+  label: string
+  id: string
+  error?: string
+  children: React.ReactNode
+}) {
+  return (
+    <div className="flex flex-col gap-1.5">
+      <label htmlFor={id} className="text-sm font-medium text-foreground">
+        {label}
+      </label>
+      {children}
+      <AnimatePresence>
+        {error && (
+          <motion.p
+            key="err"
+            initial={{ opacity: 0, y: -4 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -4 }}
+            transition={{ duration: 0.2 }}
+            className="text-xs text-destructive flex items-center gap-1"
+          >
+            <AlertCircle size={12} />
+            {error}
+          </motion.p>
+        )}
+      </AnimatePresence>
+    </div>
+  )
+}
+
+const inputClass =
+  "w-full px-4 py-3 rounded-lg bg-secondary border border-border text-foreground placeholder:text-muted-foreground " +
+  "focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-200"
+
+// ─── Main component ───────────────────────────────────────────────────────────
 export function ContactSection() {
-  const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, margin: "-100px" })
+  const sectionRef = useRef<HTMLDivElement>(null)
+  const formRef    = useRef<HTMLFormElement>(null)
+  const isInView   = useInView(sectionRef, { once: true, margin: "-100px" })
 
+  const [fields, setFields] = useState<FormFields>(EMPTY_FORM)
+  const [errors, setErrors] = useState<Partial<FormFields>>({})
+  const [status, setStatus] = useState<Status>("idle")
+
+  // ── Validation ──────────────────────────────────────────────────────────────
+  function validate(): boolean {
+    const next: Partial<FormFields> = {}
+    if (!fields.from_name.trim())                        next.from_name  = "Full name is required."
+    if (!fields.from_email.trim())                       next.from_email = "Email address is required."
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(fields.from_email))
+                                                         next.from_email = "Please enter a valid email."
+    if (!fields.subject.trim())                          next.subject    = "Subject is required."
+    if (!fields.message.trim())                          next.message    = "Message cannot be empty."
+    else if (fields.message.trim().length < 10)          next.message    = "Message must be at least 10 characters."
+    setErrors(next)
+    return Object.keys(next).length === 0
+  }
+
+  function handleChange(
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) {
+    const { name, value } = e.target
+    setFields((prev) => ({ ...prev, [name]: value }))
+    if (errors[name as keyof FormFields]) {
+      setErrors((prev) => ({ ...prev, [name]: undefined }))
+    }
+  }
+
+  // ── Submit ──────────────────────────────────────────────────────────────────
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    if (!validate()) return
+
+    setStatus("loading")
+
+    try {
+      await emailjs.send(
+        EMAILJS_SERVICE_ID,
+        EMAILJS_TEMPLATE_ID,
+        {
+          from_name:  fields.from_name,
+          from_email: fields.from_email,
+          subject:    fields.subject,
+          message:    fields.message,
+          to_email:   "myahtutkhaung2002@gmail.com",
+        },
+        { publicKey: EMAILJS_PUBLIC_KEY },
+      )
+      setStatus("success")
+      setFields(EMPTY_FORM)
+      setTimeout(() => setStatus("idle"), 5000)
+    } catch {
+      setStatus("error")
+      setTimeout(() => setStatus("idle"), 5000)
+    }
+  }
+
+  // ── Render ──────────────────────────────────────────────────────────────────
   return (
     <section id="contact" className="py-24 relative">
-      <div className="max-w-6xl mx-auto px-6" ref={ref}>
+      <div className="max-w-6xl mx-auto px-4 sm:px-6" ref={sectionRef}>
+
+        {/* Heading */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
           className="text-center mb-12"
         >
-          <span className="text-primary text-sm font-medium tracking-wider uppercase">Get In Touch</span>
+          <span className="text-primary text-sm font-medium tracking-wider uppercase">
+            Get In Touch
+          </span>
           <h2 className="text-3xl md:text-4xl font-bold mt-2 text-balance">
             {"Let's"} Work Together
           </h2>
           <p className="text-muted-foreground mt-4 max-w-2xl mx-auto text-pretty">
-            I&apos;m always open to discussing new projects, creative ideas, or opportunities to be part of your visions. 
-            Feel free to reach out!
+            I&apos;m always open to discussing new projects, creative ideas, or opportunities.
+            Send me a message and I&apos;ll get back to you as soon as possible.
           </p>
         </motion.div>
 
-        <div className="grid lg:grid-cols-2 gap-12">
-          {/* Contact Info */}
+        <div className="grid lg:grid-cols-2 gap-10 items-start">
+
+          {/* ── Left: contact info ─────────────────────────────────────────── */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="space-y-6"
+            className="space-y-4"
           >
-            <h3 className="text-xl font-semibold mb-6">Contact Information</h3>
+            <h3 className="text-xl font-semibold mb-2">Contact Information</h3>
 
             {[
               {
@@ -48,7 +191,7 @@ export function ContactSection() {
               {
                 icon: Phone,
                 label: "Phone",
-                value: "+959250899121",
+                value: "+959 250 899 121",
                 href: "tel:+959250899121",
               },
               {
@@ -57,140 +200,197 @@ export function ContactSection() {
                 value: "North Okkalapa Township, Yangon, Myanmar",
                 href: null,
               },
-            ].map((contact, index) => (
+            ].map((item, i) => (
               <motion.div
-                key={contact.label}
+                key={item.label}
                 initial={{ opacity: 0, y: 20 }}
                 animate={isInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.4, delay: 0.3 + index * 0.1 }}
+                transition={{ duration: 0.4, delay: 0.3 + i * 0.1 }}
                 className="group"
               >
-                {contact.href ? (
+                {item.href ? (
                   <a
-                    href={contact.href}
-                    className="flex items-start gap-4 p-4 rounded-xl bg-card border border-border hover:border-primary/30 transition-all group-hover:-translate-y-1"
+                    href={item.href}
+                    className="flex items-start gap-4 p-4 rounded-xl bg-card border border-border hover:border-primary/40 hover:-translate-y-0.5 transition-all duration-200"
                   >
-                    <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors">
-                      <contact.icon className="w-5 h-5 text-primary" />
+                    <div className="w-11 h-11 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors">
+                      <item.icon className="w-5 h-5 text-primary" />
                     </div>
-                    <div>
-                      <p className="text-sm text-muted-foreground">{contact.label}</p>
-                      <p className="text-foreground font-medium">{contact.value}</p>
+                    <div className="min-w-0">
+                      <p className="text-xs text-muted-foreground">{item.label}</p>
+                      <p className="text-foreground font-medium text-sm break-all">{item.value}</p>
                     </div>
-                    <ExternalLink className="w-4 h-4 text-muted-foreground ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <ExternalLink className="w-4 h-4 text-muted-foreground ml-auto flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
                   </a>
                 ) : (
                   <div className="flex items-start gap-4 p-4 rounded-xl bg-card border border-border">
-                    <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
-                      <contact.icon className="w-5 h-5 text-primary" />
+                    <div className="w-11 h-11 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+                      <item.icon className="w-5 h-5 text-primary" />
                     </div>
-                    <div>
-                      <p className="text-sm text-muted-foreground">{contact.label}</p>
-                      <p className="text-foreground font-medium">{contact.value}</p>
+                    <div className="min-w-0">
+                      <p className="text-xs text-muted-foreground">{item.label}</p>
+                      <p className="text-foreground font-medium text-sm">{item.value}</p>
                     </div>
                   </div>
                 )}
               </motion.div>
             ))}
 
-            {/* Social Links */}
+            {/* Social links */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.4, delay: 0.6 }}
-              className="pt-6"
+              className="pt-4"
             >
-              <h4 className="text-sm font-medium text-muted-foreground mb-4">Connect with me</h4>
-              <div className="flex gap-4">
+              <h4 className="text-sm font-medium text-muted-foreground mb-3">Connect with me</h4>
+              <div className="flex gap-3">
                 {[
-                  { icon: Github, href: "https://github.com", label: "GitHub" },
-                  { icon: Linkedin, href: "https://linkedin.com", label: "LinkedIn" },
-                ].map((social) => (
+                  {
+                    icon: Github,
+                    href: "https://github.com/myahtutkhaung2711",
+                    label: "GitHub",
+                  },
+                  {
+                    icon: Linkedin,
+                    href: "https://www.linkedin.com/in/mya-htut-khaung/",
+                    label: "LinkedIn",
+                  },
+                ].map((s) => (
                   <motion.a
-                    key={social.label}
-                    href={social.href}
+                    key={s.label}
+                    href={s.href}
                     target="_blank"
                     rel="noopener noreferrer"
                     whileHover={{ scale: 1.1, y: -2 }}
                     whileTap={{ scale: 0.95 }}
-                    className="p-4 rounded-xl bg-card border border-border hover:border-primary/30 hover:bg-card/80 transition-all"
-                    aria-label={social.label}
+                    className="flex items-center gap-2 px-4 py-3 rounded-xl bg-card border border-border hover:border-primary/40 hover:bg-primary/5 transition-all duration-200 text-sm font-medium"
+                    aria-label={s.label}
                   >
-                    <social.icon className="w-6 h-6" />
+                    <s.icon className="w-5 h-5" />
+                    {s.label}
                   </motion.a>
                 ))}
               </div>
             </motion.div>
           </motion.div>
 
-          {/* Contact Form */}
+          {/* ── Right: form ─────────────────────────────────────────────────── */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.3 }}
-            className="p-6 rounded-xl bg-card border border-border"
+            className="p-6 sm:p-8 rounded-2xl bg-card border border-border"
           >
             <h3 className="text-xl font-semibold mb-6">Send a Message</h3>
 
-            <form className="space-y-4">
+            {/* Status banner */}
+            <AnimatePresence>
+              {(status === "success" || status === "error") && (
+                <motion.div
+                  key={status}
+                  initial={{ opacity: 0, y: -8, scale: 0.97 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -8, scale: 0.97 }}
+                  transition={{ duration: 0.3 }}
+                  className={`mb-5 flex items-start gap-3 p-4 rounded-lg border text-sm font-medium ${
+                    status === "success"
+                      ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-400"
+                      : "bg-red-500/10 border-red-500/30 text-red-400"
+                  }`}
+                >
+                  {status === "success" ? (
+                    <CheckCircle className="w-5 h-5 flex-shrink-0 mt-0.5" />
+                  ) : (
+                    <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" />
+                  )}
+                  <span>
+                    {status === "success"
+                      ? "Message sent successfully! I'll get back to you soon."
+                      : "Failed to send the message. Please try again or email me directly."}
+                  </span>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            <form ref={formRef} onSubmit={handleSubmit} noValidate className="space-y-4">
+
               <div className="grid sm:grid-cols-2 gap-4">
-                <div>
-                  <label htmlFor="name" className="text-sm font-medium text-foreground mb-2 block">
-                    Name
-                  </label>
+                <Field label="Full Name" id="from_name" error={errors.from_name}>
                   <input
                     type="text"
-                    id="name"
-                    className="w-full px-4 py-3 rounded-lg bg-secondary border border-border focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all text-foreground placeholder:text-muted-foreground"
-                    placeholder="Your name"
+                    id="from_name"
+                    name="from_name"
+                    value={fields.from_name}
+                    onChange={handleChange}
+                    placeholder="John Doe"
+                    autoComplete="name"
+                    className={`${inputClass} ${errors.from_name ? "border-destructive focus:border-destructive focus:ring-destructive/20" : ""}`}
                   />
-                </div>
-                <div>
-                  <label htmlFor="email" className="text-sm font-medium text-foreground mb-2 block">
-                    Email
-                  </label>
+                </Field>
+
+                <Field label="Email Address" id="from_email" error={errors.from_email}>
                   <input
                     type="email"
-                    id="email"
-                    className="w-full px-4 py-3 rounded-lg bg-secondary border border-border focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all text-foreground placeholder:text-muted-foreground"
-                    placeholder="your@email.com"
+                    id="from_email"
+                    name="from_email"
+                    value={fields.from_email}
+                    onChange={handleChange}
+                    placeholder="john@example.com"
+                    autoComplete="email"
+                    className={`${inputClass} ${errors.from_email ? "border-destructive focus:border-destructive focus:ring-destructive/20" : ""}`}
                   />
-                </div>
+                </Field>
               </div>
 
-              <div>
-                <label htmlFor="subject" className="text-sm font-medium text-foreground mb-2 block">
-                  Subject
-                </label>
+              <Field label="Subject" id="subject" error={errors.subject}>
                 <input
                   type="text"
                   id="subject"
-                  className="w-full px-4 py-3 rounded-lg bg-secondary border border-border focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all text-foreground placeholder:text-muted-foreground"
-                  placeholder="What's this about?"
+                  name="subject"
+                  value={fields.subject}
+                  onChange={handleChange}
+                  placeholder="Project inquiry / Freelance work / Say hi"
+                  className={`${inputClass} ${errors.subject ? "border-destructive focus:border-destructive focus:ring-destructive/20" : ""}`}
                 />
-              </div>
+              </Field>
 
-              <div>
-                <label htmlFor="message" className="text-sm font-medium text-foreground mb-2 block">
-                  Message
-                </label>
+              <Field label="Message" id="message" error={errors.message}>
                 <textarea
                   id="message"
+                  name="message"
                   rows={5}
-                  className="w-full px-4 py-3 rounded-lg bg-secondary border border-border focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all text-foreground placeholder:text-muted-foreground resize-none"
-                  placeholder="Your message..."
+                  value={fields.message}
+                  onChange={handleChange}
+                  placeholder="Tell me about your project or idea..."
+                  className={`${inputClass} resize-none ${errors.message ? "border-destructive focus:border-destructive focus:ring-destructive/20" : ""}`}
                 />
-              </div>
+              </Field>
 
               <motion.button
                 type="submit"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 transition-colors"
+                disabled={status === "loading"}
+                whileHover={status !== "loading" ? { scale: 1.02, y: -1 } : {}}
+                whileTap={status !== "loading" ? { scale: 0.98 } : {}}
+                className="w-full flex items-center justify-center gap-2 px-6 py-3.5 rounded-lg font-semibold text-sm transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed"
+                style={{ backgroundColor: "var(--primary)", color: "var(--primary-foreground)" }}
               >
-                <Send size={18} />
-                Send Message
+                {status === "loading" ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    Sending…
+                  </>
+                ) : (
+                  <>
+                    <Send className="w-4 h-4" />
+                    Send Message
+                  </>
+                )}
               </motion.button>
+
+              <p className="text-xs text-muted-foreground text-center">
+                Your message will be delivered directly to my inbox.
+              </p>
             </form>
           </motion.div>
         </div>
