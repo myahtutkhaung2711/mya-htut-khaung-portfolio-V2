@@ -1,7 +1,44 @@
 "use client"
 
-import { motion } from "framer-motion"
+import { motion, AnimatePresence } from "framer-motion"
 import { Github, Linkedin, Mail, MapPin, Phone, ChevronDown } from "lucide-react"
+import Image from "next/image"
+import { useState, useEffect } from "react"
+
+const ROLES = [
+  "Full Stack Developer",
+  "Freelancer",
+  "UI/UX Designer",
+  "Web Developer",
+]
+
+function AnimatedRole() {
+  const [index, setIndex] = useState(0)
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setIndex((prev) => (prev + 1) % ROLES.length)
+    }, 2800)
+    return () => clearInterval(interval)
+  }, [])
+
+  return (
+    <div className="h-10 overflow-hidden relative">
+      <AnimatePresence mode="wait">
+        <motion.span
+          key={index}
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -30 }}
+          transition={{ duration: 0.45, ease: "easeInOut" }}
+          className="absolute inset-0 text-xl md:text-2xl font-semibold text-primary"
+        >
+          {ROLES[index]}
+        </motion.span>
+      </AnimatePresence>
+    </div>
+  )
+}
 
 export function HeroSection() {
   const scrollToAbout = () => {
@@ -16,35 +53,21 @@ export function HeroSection() {
       {/* Animated Background */}
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-primary/10 via-background to-background" />
-        
+
         {/* Floating orbs */}
         <motion.div
           className="absolute top-1/4 left-1/4 w-64 h-64 rounded-full bg-primary/5 blur-3xl"
-          animate={{
-            x: [0, 50, 0],
-            y: [0, 30, 0],
-          }}
-          transition={{
-            duration: 8,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
+          animate={{ x: [0, 50, 0], y: [0, 30, 0] }}
+          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
         />
         <motion.div
           className="absolute bottom-1/4 right-1/4 w-96 h-96 rounded-full bg-primary/5 blur-3xl"
-          animate={{
-            x: [0, -40, 0],
-            y: [0, -40, 0],
-          }}
-          transition={{
-            duration: 10,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
+          animate={{ x: [0, -40, 0], y: [0, -40, 0] }}
+          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
         />
-        
+
         {/* Grid pattern */}
-        <div 
+        <div
           className="absolute inset-0 opacity-[0.02]"
           style={{
             backgroundImage: `linear-gradient(var(--foreground) 1px, transparent 1px),
@@ -80,17 +103,16 @@ export function HeroSection() {
               className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-balance"
             >
               <span className="text-foreground">Hi, I&apos;m </span>
-              <span className="text-gradient">Mya Htut Khaung</span>
+              <span className="text-foreground">Mya Htut Khaung</span>
             </motion.h1>
 
-            <motion.h2
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
-              className="text-xl md:text-2xl text-muted-foreground font-light"
             >
-              Full Stack Web Developer
-            </motion.h2>
+              <AnimatedRole />
+            </motion.div>
 
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -145,36 +167,38 @@ export function HeroSection() {
                 Contact Me
               </motion.a>
               <motion.a
-                href="https://github.com"
+                href="https://github.com/myahtutkhaung2711"
                 target="_blank"
                 rel="noopener noreferrer"
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
                 className="p-3 rounded-lg bg-secondary hover:bg-secondary/80 transition-colors"
+                aria-label="GitHub"
               >
                 <Github size={20} />
               </motion.a>
               <motion.a
-                href="https://linkedin.com"
+                href="https://www.linkedin.com/in/mya-htut-khaung/"
                 target="_blank"
                 rel="noopener noreferrer"
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
                 className="p-3 rounded-lg bg-secondary hover:bg-secondary/80 transition-colors"
+                aria-label="LinkedIn"
               >
                 <Linkedin size={20} />
               </motion.a>
             </motion.div>
           </motion.div>
 
-          {/* Right Content - 3D Card */}
+          {/* Right Content - Profile Photo */}
           <motion.div
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}
             className="hidden lg:flex justify-center"
           >
-            <Card3D />
+            <ProfilePhoto />
           </motion.div>
         </div>
 
@@ -187,10 +211,7 @@ export function HeroSection() {
           className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-muted-foreground hover:text-primary transition-colors"
         >
           <span className="text-sm">Scroll to explore</span>
-          <motion.div
-            animate={{ y: [0, 8, 0] }}
-            transition={{ duration: 1.5, repeat: Infinity }}
-          >
+          <motion.div animate={{ y: [0, 8, 0] }} transition={{ duration: 1.5, repeat: Infinity }}>
             <ChevronDown size={24} />
           </motion.div>
         </motion.button>
@@ -199,60 +220,63 @@ export function HeroSection() {
   )
 }
 
-function Card3D() {
+function ProfilePhoto() {
   return (
     <motion.div
-      className="relative w-80 h-96 rounded-2xl"
-      whileHover={{ rotateY: 5, rotateX: -5 }}
+      className="relative"
+      whileHover={{ scale: 1.02 }}
       transition={{ type: "spring", stiffness: 300, damping: 20 }}
-      style={{ perspective: 1000, transformStyle: "preserve-3d" }}
     >
-      {/* Main card */}
-      <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-card via-card to-secondary border border-border overflow-hidden glow">
-        {/* Card content */}
-        <div className="p-8 h-full flex flex-col justify-between">
-          <div>
-            <div className="w-16 h-16 rounded-xl bg-primary/20 flex items-center justify-center mb-6">
-              <span className="text-2xl font-bold text-primary">{"</>"}</span>
-            </div>
-            <h3 className="text-lg font-semibold text-foreground mb-2">Full Stack Developer</h3>
-            <p className="text-sm text-muted-foreground leading-relaxed">
-              2+ years of experience building responsive and user-friendly web applications
-            </p>
-          </div>
-          
-          <div className="space-y-3">
-            <div className="flex items-center justify-between text-sm">
-              <span className="text-muted-foreground">Projects Completed</span>
-              <span className="text-primary font-medium">10+</span>
-            </div>
-            <div className="flex items-center justify-between text-sm">
-              <span className="text-muted-foreground">Technologies</span>
-              <span className="text-primary font-medium">8+</span>
-            </div>
-            <div className="flex items-center justify-between text-sm">
-              <span className="text-muted-foreground">Experience</span>
-              <span className="text-primary font-medium">2+ Years</span>
-            </div>
-          </div>
-        </div>
-        
-        {/* Decorative elements */}
-        <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2" />
-        <div className="absolute bottom-0 left-0 w-24 h-24 bg-primary/10 rounded-full blur-2xl translate-y-1/2 -translate-x-1/2" />
+      {/* Rotating ring */}
+      <motion.div
+        className="absolute -inset-4 rounded-full border border-primary/20"
+        animate={{ rotate: 360 }}
+        transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+        style={{
+          background:
+            "conic-gradient(from 0deg, transparent 0%, transparent 70%, hsl(var(--primary) / 0.4) 100%)",
+        }}
+      />
+      <motion.div
+        className="absolute -inset-8 rounded-full border border-primary/10"
+        animate={{ rotate: -360 }}
+        transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+        style={{
+          background:
+            "conic-gradient(from 180deg, transparent 0%, transparent 80%, hsl(var(--primary) / 0.2) 100%)",
+        }}
+      />
+
+      {/* Photo container */}
+      <div className="relative w-72 h-80 rounded-2xl overflow-hidden border-2 border-primary/30 glow">
+        <Image
+          src="/images/profile.jpg"
+          alt="Mya Htut Khaung - Full Stack Developer"
+          fill
+          className="object-cover object-top"
+          priority
+        />
+        {/* Subtle overlay at bottom */}
+        <div className="absolute bottom-0 inset-x-0 h-20 bg-gradient-to-t from-background/60 to-transparent" />
       </div>
-      
-      {/* Floating elements */}
+
+      {/* Floating badge */}
       <motion.div
-        className="absolute -top-4 -right-4 w-8 h-8 rounded-lg bg-primary/20 border border-primary/30"
-        animate={{ y: [0, -10, 0], rotate: [0, 5, 0] }}
-        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-      />
+        className="absolute -bottom-4 -right-4 px-4 py-2 rounded-xl bg-card border border-border shadow-lg"
+        animate={{ y: [0, -6, 0] }}
+        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+      >
+        <span className="text-xs font-medium text-primary">2+ Years Exp.</span>
+      </motion.div>
+
+      {/* Floating badge left */}
       <motion.div
-        className="absolute -bottom-6 -left-6 w-12 h-12 rounded-full bg-secondary border border-border"
-        animate={{ y: [0, 10, 0], rotate: [0, -5, 0] }}
-        transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-      />
+        className="absolute -top-4 -left-4 px-3 py-2 rounded-xl bg-card border border-border shadow-lg"
+        animate={{ y: [0, 6, 0] }}
+        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+      >
+        <span className="text-xs font-medium text-foreground">10+ Projects</span>
+      </motion.div>
     </motion.div>
   )
 }

@@ -10,15 +10,14 @@ export function Footer() {
     <footer className="py-12 border-t border-border bg-card/30">
       <div className="max-w-6xl mx-auto px-6">
         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-          {/* Logo and tagline */}
+          {/* Name only */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
             className="text-center md:text-left"
           >
-            <h3 className="text-xl font-bold text-gradient mb-1">Mya Htut Khaung</h3>
-            <p className="text-sm text-muted-foreground">Full Stack Web Developer</p>
+            <h3 className="text-xl font-bold text-foreground">Mya Htut Khaung</h3>
           </motion.div>
 
           {/* Quick Links */}
@@ -47,7 +46,7 @@ export function Footer() {
             className="flex items-center gap-4"
           >
             <motion.a
-              href="https://github.com"
+              href="https://github.com/myahtutkhaung2711"
               target="_blank"
               rel="noopener noreferrer"
               whileHover={{ scale: 1.1 }}
@@ -58,7 +57,7 @@ export function Footer() {
               <Github size={18} />
             </motion.a>
             <motion.a
-              href="https://linkedin.com"
+              href="https://www.linkedin.com/in/mya-htut-khaung/"
               target="_blank"
               rel="noopener noreferrer"
               whileHover={{ scale: 1.1 }}
