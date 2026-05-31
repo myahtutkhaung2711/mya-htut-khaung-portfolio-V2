@@ -3,11 +3,13 @@
 import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Menu, X } from "lucide-react"
+import Image from "next/image"
 
 const navLinks = [
   { name: "About", href: "#about" },
   { name: "Experience", href: "#experience" },
   { name: "Skills", href: "#skills" },
+  { name: "Projects", href: "#projects" },
   { name: "Education", href: "#education" },
   { name: "Contact", href: "#contact" },
 ]
@@ -64,11 +66,19 @@ export function Navbar() {
             {/* Logo */}
             <motion.a
               href="#"
-              className="text-xl font-bold text-gradient"
+              className="flex items-center"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
+              aria-label="Mya Htut Khaung - Home"
             >
-              MHK
+              <Image
+                src="/images/logo.png"
+                alt="MHK Logo"
+                width={120}
+                height={40}
+                className="h-9 w-auto object-contain"
+                priority
+              />
             </motion.a>
 
             {/* Desktop Navigation */}

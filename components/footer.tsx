@@ -27,7 +27,7 @@ export function Footer() {
             transition={{ duration: 0.5, delay: 0.1 }}
             className="flex flex-wrap justify-center gap-6"
           >
-            {["About", "Experience", "Skills", "Education", "Contact"].map((link) => (
+            {["About", "Experience", "Skills", "Projects", "Education", "Contact"].map((link) => (
               <a
                 key={link}
                 href={`#${link.toLowerCase()}`}
