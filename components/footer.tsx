@@ -17,7 +17,13 @@ export function Footer() {
             transition={{ duration: 0.5 }}
             className="text-center md:text-left"
           >
-            <h3 className="text-xl font-bold text-foreground">Mya Htut Khaung</h3>
+            <div className="">
+              <img 
+                src="/images/logo.png" 
+                alt="Mya Htut Khaung Logo" 
+                className="h-8 w-auto object-contain mx-auto md:mx-0" 
+              />
+            </div>
           </motion.div>
 
           {/* Quick Links */}
@@ -77,9 +83,9 @@ export function Footer() {
           transition={{ duration: 0.5, delay: 0.3 }}
           className="mt-8 pt-8 border-t border-border text-center"
         >
-          <p className="text-sm text-muted-foreground flex items-center justify-center gap-1">
+          <p className="text-sm text-bold-foreground flex items-center justify-center gap-1">
             © {currentYear} Mya Htut Khaung. Built with{" "}
-            <Heart size={14} className="text-primary fill-primary" /> using Next.js & Framer Motion
+            <Heart size={15} className="text-foreground outline-primary " /> using <span className="text-bold-foreground">Next.JS & React</span>
           </p>
         </motion.div>
       </div>

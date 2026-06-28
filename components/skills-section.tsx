@@ -151,36 +151,6 @@ export function SkillsSection() {
           ))}
         </motion.div>
 
-        {/* All Skills Overview */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, delay: 0.8 }}
-          className="mt-12 p-6 rounded-xl bg-card border border-border"
-        >
-          <h3 className="text-lg font-semibold mb-6">Skills Overview</h3>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {skillCategories.map((category, catIndex) => (
-              <motion.div
-                key={category.name}
-                initial={{ opacity: 0, y: 20 }}
-                animate={isInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.4, delay: 0.9 + catIndex * 0.1 }}
-                className="space-y-3"
-              >
-                <h4 className="text-sm font-semibold text-primary">{category.name}</h4>
-                <ul className="space-y-2">
-                  {category.skills.map((skill) => (
-                    <li key={skill.name} className="flex items-center gap-2 text-sm text-muted-foreground">
-                      <span className="w-1.5 h-1.5 rounded-full bg-primary" />
-                      {skill.name}
-                    </li>
-                  ))}
-                </ul>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
       </div>
     </section>
   )

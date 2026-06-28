@@ -4,12 +4,13 @@ import { motion, AnimatePresence } from "framer-motion"
 import { Github, Linkedin, Mail, MapPin, Phone, ChevronDown } from "lucide-react"
 import Image from "next/image"
 import { useState, useEffect } from "react"
+import { Download } from "lucide-react"
 
 const ROLES = [
   "Full Stack Developer",
   "Freelancer",
   "UI/UX Designer",
-  "Web Developer",
+  "Web Development",
 ]
 
 function AnimatedRole() {
@@ -102,7 +103,7 @@ export function HeroSection() {
               transition={{ delay: 0.3 }}
               className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-balance"
             >
-              <span className="text-foreground">Hi, I&apos;m </span>
+              <span className="text-foreground">Hi, I&apos;m </span><br />
               <span className="text-foreground">Mya Htut Khaung</span>
             </motion.h1>
 
@@ -120,7 +121,7 @@ export function HeroSection() {
               transition={{ delay: 0.5 }}
               className="flex flex-wrap gap-3"
             >
-              {["PHP", "Laravel", "React.js", "Node.js", "MySQL"].map((tech, index) => (
+              {["PHP", "Laravel", "React.JS", "Node.JS", "MySQL"].map((tech, index) => (
                 <motion.span
                   key={tech}
                   initial={{ opacity: 0, scale: 0.8 }}
@@ -158,13 +159,12 @@ export function HeroSection() {
               className="flex items-center gap-4 pt-4"
             >
               <motion.a
-                href="mailto:myahtutkhaung2002@gmail.com"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 transition-colors"
+                href="/cv/Mya_Htut_Khaung_CV.pdf"
+                download
+                className="inline-flex items-center gap-2 px-3 py-3 rounded-xl bg-primary text-primary-foreground font-medium"
               >
-                <Mail size={18} />
-                Contact Me
+                <Download size={18} />
+                View Resume
               </motion.a>
               <motion.a
                 href="https://github.com/myahtutkhaung2711"
@@ -275,7 +275,7 @@ function ProfilePhoto() {
         animate={{ y: [0, 6, 0] }}
         transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 1 }}
       >
-        <span className="text-xs font-medium text-foreground">10+ Projects</span>
+        <span className="text-xs font-medium text-primary">10+ Projects</span>
       </motion.div>
     </motion.div>
   )

@@ -46,11 +46,11 @@ export function AboutSection() {
 
               <div className="relative w-64 h-72 md:w-72 md:h-80 rounded-2xl overflow-hidden border border-border shadow-2xl">
                 <Image
-                  src="/images/profile.jpg"
+                  src="/images/profile-1.jpg"
                   alt="Mya Htut Khaung"
                   fill
                   className="object-cover object-top"
-                />
+                /> 
                 <div className="absolute bottom-0 inset-x-0 h-16 bg-gradient-to-t from-background/50 to-transparent" />
               </div>
 
@@ -60,8 +60,8 @@ export function AboutSection() {
                 animate={{ y: [0, -5, 0] }}
                 transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
               >
-                <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-                <span className="text-xs font-medium text-foreground">Open to new opportunities</span>
+                <span className="w-3 h-3 rounded-full bg-primary animate-pulse" />
+                <span className="text-xs font-medium text-foreground bg-success">Open to new opportunities</span>
               </motion.div>
             </div>
           </motion.div>
@@ -109,31 +109,6 @@ export function AboutSection() {
             </div>
           </motion.div>
         </div>
-
-        {/* Languages */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, delay: 0.8 }}
-          className="mt-16 pt-12 border-t border-border"
-        >
-          <h3 className="text-lg font-semibold mb-6">Languages</h3>
-          <div className="flex flex-wrap gap-4">
-            {[
-              { name: "Myanmar", level: "Native" },
-              { name: "English", level: "Working Proficiency" },
-              { name: "Japanese", level: "Basic" },
-            ].map((lang) => (
-              <div
-                key={lang.name}
-                className="px-4 py-2 rounded-lg bg-secondary text-secondary-foreground text-sm"
-              >
-                <span className="font-medium">{lang.name}</span>
-                <span className="text-muted-foreground ml-2">· {lang.level}</span>
-              </div>
-            ))}
-          </div>
-        </motion.div>
       </div>
     </section>
   )
