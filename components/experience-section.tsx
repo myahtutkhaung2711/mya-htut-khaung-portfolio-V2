@@ -1,128 +1,234 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { useInView } from "framer-motion"
-import { useRef } from "react"
-import { Briefcase, Calendar, ChevronRight } from "lucide-react"
+import { Briefcase, Calendar, MapPin, ArrowRight } from "lucide-react"
+import { SectionHeader } from "./section-header"
 
 const experiences = [
   {
-    title: "Junior Web Developer",
-    company: "WILLTEC MYANMAR CO.,LTD.",
-    period: "January 2025 - March 2026",
-    type: "Full-time",
-    responsibilities: [
-      "Developed and maintained company websites using PHP and Laravel",
-      "Fixed bugs and implemented new system features based on business requirements",
-      "Designed and optimized MySQL database structures",
-      "Performed testing, debugging, and system maintenance",
-      "Collaborated with team members using Git version control",
-      "Maintained and enhanced eJLS (e-Learning Japanese Language School) Website & Willtec Myanmar corporate website",
-    ],
+    id: 1,
+    company: "WILLTEC MYANMAR",
+    position: "Intern Web Developer",
+    duration: "April 2024 - Dec 2024 ( 8 Months )",
+    location: "Yangon, Myanmar",
+    description: "Contributed to web application development and maintenance using PHP/Laravel while assisting with testing, debugging, and documentation.",
+    highlights: "PHP, Laravel, website maintenance, testing, debugging, documentation, and collaboration with senior developers.",
   },
   {
-    title: "Web Developer Intern",
-    company: "WILLTEC MYANMAR CO.,LTD.",
-    period: "April 2024 - December 2024",
-    type: "Internship",
-    responsibilities: [
-      "Assisted in web application development using PHP and Laravel",
-      "Supported website maintenance activities",
-      "Conducted testing and bug fixing activities",
-      "Prepared user guides and documentation",
-      "Worked closely with senior developers during project development",
-    ],
+    id: 2,
+    company: "WILLTEC MYANMAR",
+    position: "Junior Web Developer",
+    duration: "Jan 2025 - March 2026 ( 1 Year 3 Months )",
+    location: "Yangon, Myanmar",
+    description: "Developed and maintained scalable web applications using PHP/Laravel while supporting ongoing system improvements",
+    highlights: "PHP, Laravel, MySQL, feature development, bug fixing, debugging, testing, system maintenance, Git version control, and website support.",
   },
   {
-    title: "Freelance Full Stack Developer",
-    company: "Self-Employed",
-    period: "2025 - Present",
-    type: "Freelance",
-    responsibilities: [
-      "Developed web applications using PHP, Laravel, and MySQL",
-      "Designed and implemented REST APIs for mobile and web applications",
-      "Worked with frontend technologies such as HTML, CSS, and JavaScript",
-      "Collaborated with clients to understand requirements and deliver solutions",
-    ],
+    id: 3,
+    company: "Freelance Projects",
+    position: "Full Stack Developer & UI/UX Designer",
+    duration: "August 2025 - Present",
+    location: "Freelance / Remote",
+    description: "Developed and maintained web applications using PHP, Laravel, and MySQL, including REST API integration and frontend development.",
+    highlights: "PHP, Laravel, MySQL, REST APIs, HTML, CSS, JavaScript, and client communication.",
   },
 ]
 
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.15,
+      delayChildren: 0.3,
+    },
+  },
+}
+
+const itemVariants = {
+  hidden: { opacity: 0, x: -30 },
+  visible: {
+    opacity: 1,
+    x: 0,
+    transition: {
+      duration: 0.6,
+    },
+  },
+}
+
 export function ExperienceSection() {
-  const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, margin: "-100px" })
-
   return (
-    <section id="experience" className="py-24 relative bg-card/30">
-      <div className="max-w-6xl mx-auto px-6" ref={ref}>
+    <section id="experience" className="section-dark py-24 relative overflow-hidden">
+      {/* Animated background */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="mb-12"
+          className="absolute top-20 left-10 w-72 h-72 rounded-full bg-primary/5 blur-3xl"
+          animate={{
+            y: [0, 40, 0],
+            x: [0, 20, 0],
+          }}
+          transition={{
+            duration: 8,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        />
+        <motion.div
+          className="absolute bottom-20 right-10 w-72 h-72 rounded-full bg-accent/5 blur-3xl"
+          animate={{
+            y: [0, -40, 0],
+            x: [0, -20, 0],
+          }}
+          transition={{
+            duration: 10,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        />
+      </div>
+
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        {/* Section Header */}
+        <SectionHeader
+          badge="Career Journey"
+          badgeIcon={Briefcase}
+          title="Experience"
+          subtitle="My professional journey building innovative solutions and growing as a developer."
+        />
+
+        {/* Experience List */}
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          className="space-y-6"
         >
-          <span className="text-primary text-sm font-medium tracking-wider uppercase">Career Journey</span>
-          <h2 className="text-3xl md:text-4xl font-bold mt-2 text-balance">Work Experience</h2>
-        </motion.div>
-
-        <div className="relative">
-          {/* Timeline line */}
-          <div className="absolute left-0 md:left-1/2 top-0 bottom-0 w-px bg-border md:-translate-x-1/2" />
-
           {experiences.map((exp, index) => (
             <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 50 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6, delay: 0.2 + index * 0.2 }}
-              className={`relative pl-8 md:pl-0 pb-12 last:pb-0 ${
-                index % 2 === 0 ? "md:pr-8 md:text-right md:ml-0 md:mr-auto md:w-1/2" : "md:pl-8 md:ml-auto md:w-1/2"
-              }`}
+              key={exp.id}
+              variants={itemVariants}
+              whileHover={{ x: 8 }}
+              className="group relative"
             >
-              {/* Timeline dot */}
-              <motion.div
-                initial={{ scale: 0 }}
-                animate={isInView ? { scale: 1 } : {}}
-                transition={{ duration: 0.3, delay: 0.4 + index * 0.2 }}
-                className={`absolute top-0 w-4 h-4 rounded-full bg-primary border-4 border-background ${
-                  index % 2 === 0 ? "left-0 md:left-auto md:-right-2 md:translate-x-1/2" : "left-0 md:-left-2 md:-translate-x-1/2"
-                }`}
-              />
+              {/* Experience Item */}
+              <div className="flex gap-6 p-6 rounded-xl border border-border hover:border-primary bg-card/50 hover:bg-card transition-all duration-300">
+                {/* Left accent line */}
+                <motion.div
+                  initial={{ height: 0 }}
+                  whileInView={{ height: "100%" }}
+                  transition={{ duration: 0.8, delay: index * 0.2 }}
+                  viewport={{ once: true }}
+                  className="w-1 bg-gradient-to-b from-primary to-primary/50 rounded-full flex-shrink-0"
+                />
 
-              {/* Content card */}
-              <motion.div
-                whileHover={{ y: -4 }}
-                className={`p-6 rounded-xl bg-card border border-border hover:border-primary/30 transition-all ${
-                  index % 2 === 0 ? "md:mr-4" : "md:ml-4"
-                }`}
-              >
-                <div className={`flex items-center gap-2 mb-3 ${index % 2 === 0 ? "md:justify-end" : ""}`}>
-                  <span className="px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium">
-                    {exp.type}
-                  </span>
+                {/* Content */}
+                <div className="flex-1 min-w-0">
+                  {/* Header */}
+                  <div className="flex items-start justify-between gap-4 mb-3">
+                    <div>
+                      <motion.h3
+                        initial={{ opacity: 0 }}
+                        whileInView={{ opacity: 1 }}
+                        transition={{ delay: index * 0.2 + 0.1 }}
+                        viewport={{ once: true }}
+                        className="text-xl font-bold text-foreground group-hover:text-primary transition-colors"
+                      >
+                        {exp.position}
+                      </motion.h3>
+                      <motion.p
+                        initial={{ opacity: 0 }}
+                        whileInView={{ opacity: 1 }}
+                        transition={{ delay: index * 0.2 + 0.15 }}
+                        viewport={{ once: true }}
+                        className="text-sm text-primary font-semibold"
+                      >
+                        {exp.company}
+                      </motion.p>
+                    </div>
+                    <motion.div
+                      whileHover={{ rotate: 45 }}
+                      className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors"
+                    >
+                      <Briefcase className="w-5 h-5 text-primary" />
+                    </motion.div>
+                  </div>
+
+                  {/* Meta info */}
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
+                    transition={{ delay: index * 0.2 + 0.2 }}
+                    viewport={{ once: true }}
+                    className="flex flex-wrap gap-4 text-xs text-muted-foreground mb-3"
+                  >
+                    <div className="flex items-center gap-1.5">
+                      <Calendar className="w-3.5 h-3.5 text-primary" />
+                      {exp.duration}
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <MapPin className="w-3.5 h-3.5 text-primary" />
+                      {exp.location}
+                    </div>
+                  </motion.div>
+
+                  {/* Description */}
+                  <motion.p
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
+                    transition={{ delay: index * 0.2 + 0.25 }}
+                    viewport={{ once: true }}
+                    className="text-sm text-muted-foreground mb-3"
+                  >
+                    {exp.description}
+                  </motion.p>
+
+                  {/* Highlight */}
+                  <motion.div
+                    initial={{ opacity: 0, x: -10 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.2 + 0.3 }}
+                    viewport={{ once: true }}
+                    className="inline-flex items-center gap-2 px-3 py-1.5 bg-primary/10 border border-primary/30 rounded-lg hover:border-primary/60 transition-all cursor-pointer group/highlight"
+                  >
+                    <span className="text-xs font-medium text-primary">{exp.highlights}</span>
+                    <motion.span
+                      animate={{ x: [0, 3, 0] }}
+                      transition={{ duration: 1.5, repeat: Infinity }}
+                      className="text-primary group-hover/highlight:translate-x-1 transition-transform"
+                    >
+                      <ArrowRight className="w-3 h-3" />
+                    </motion.span>
+                  </motion.div>
                 </div>
-
-                <h3 className="text-xl font-semibold text-foreground mb-1">{exp.title}</h3>
-                <p className="text-primary font-medium mb-2">{exp.company}</p>
-                
-                <div className={`flex items-center gap-2 text-sm text-muted-foreground mb-4 ${
-                  index % 2 === 0 ? "md:justify-end" : ""
-                }`}>
-                  <Calendar size={14} />
-                  <span>{exp.period}</span>
-                </div>
-
-                <ul className={`space-y-2 ${index % 2 === 0 ? "md:text-left" : ""}`}>
-                  {exp.responsibilities.map((resp, respIndex) => (
-                    <li key={respIndex} className="flex items-start gap-2 text-sm text-muted-foreground">
-                      <ChevronRight size={14} className="mt-1 flex-shrink-0 text-primary" />
-                      <span>{resp}</span>
-                    </li>
-                  ))}
-                </ul>
-              </motion.div>
+              </div>
             </motion.div>
           ))}
-        </div>
+        </motion.div>
+
+        {/* Bottom CTA */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.8 }}
+          viewport={{ once: true }}
+          className="text-center mt-10"
+        >
+          <motion.a
+            href="#projects"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="inline-flex items-center gap-2 px-6 py-3 border-2 border-primary text-primary rounded-lg font-semibold hover:shadow-lg hover:shadow-primary/40 transition-all text-sm sm:text-base"
+          >
+            <span>View My Projects</span>
+            <motion.span
+              animate={{ x: [0, 4, 0] }}
+              transition={{ duration: 1.5, repeat: Infinity }}
+            >
+              →
+            </motion.span>
+          </motion.a>
+        </motion.div>
       </div>
     </section>
   )

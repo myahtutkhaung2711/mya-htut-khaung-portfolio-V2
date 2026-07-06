@@ -1,6 +1,9 @@
 "use client"
 
 import { motion } from "framer-motion"
+import { Zap } from "lucide-react"
+import { SectionHeader } from "./section-header"
+// import { motion } from "framer-motion"
 import { useInView } from "framer-motion"
 import { useRef, useState } from "react"
 
@@ -57,22 +60,29 @@ export function SkillsSection() {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: "-100px" })
   const [activeCategory, setActiveCategory] = useState(0)
-
   return (
-    <section id="skills" className="py-24 relative">
-      <div className="max-w-6xl mx-auto px-6" ref={ref}>
+    
+    <section id="skills" className="section-dark py-16 sm:py-20 lg:py-24 relative overflow-hidden">
+      {/* Minimal background */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="mb-12"
-        >
-          <span className="text-primary text-sm font-medium tracking-wider uppercase">Expertise</span>
-          <h2 className="text-3xl md:text-4xl font-bold mt-2 text-balance">Technical Skills</h2>
-        </motion.div>
+          className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full bg-primary/5 blur-3xl"
+          animate={{ y: [0, 30, 0] }}
+          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+        />
+      </div>
+
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        {/* Section Header */}
+        <SectionHeader
+          badge="Technical Skills"
+          badgeIcon={Zap}
+          subtitle="Proficient in modern technologies and frameworks."
+        />
 
         {/* Tech Stack Badges */}
         <motion.div
+          ref={ref}
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.2 }}
@@ -151,6 +161,55 @@ export function SkillsSection() {
           ))}
         </motion.div>
 
+        {/* Bottom Stats */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.6 }}
+          viewport={{ once: true }}
+          className="mt-14 sm:mt-16 p-5 sm:p-6 rounded-lg border border-border bg-card/50"
+        >
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
+            {[
+              { label: "Years Experience", value: "2+" },
+              { label: "Projects Completed", value: "7+" },
+              { label: "Technologies", value: "24+" },
+              { label: "Client Satisfaction", value: "75%" },
+            ].map((stat, idx) => (
+              <motion.div
+                key={stat.label}
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                transition={{ delay: idx * 0.08 + 0.4 }}
+                viewport={{ once: true }}
+                className="text-center"
+              >
+                <div className="text-2xl sm:text-3xl font-bold text-primary mb-1">
+                  {stat.value}
+                </div>
+                <p className="text-xs sm:text-sm text-muted-foreground">{stat.label}</p>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
+
+        {/* CTA */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ duration: 0.6, delay: 0.8 }}
+          viewport={{ once: true }}
+          className="text-center mt-12 sm:mt-14"
+        >
+          <motion.a
+            href="#contact"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="iflex items-center justify-center gap-2 px-6 sm:px-8 py-3 sm:py-3 border-2 border-primary text-primary rounded-lg font-semibold hover:bg-primary/10 transition-all text-sm sm:text-base"
+          >
+            <span>Get In Touch </span> →
+          </motion.a>
+        </motion.div>
       </div>
     </section>
   )

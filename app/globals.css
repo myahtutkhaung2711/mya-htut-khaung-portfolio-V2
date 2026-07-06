@@ -135,55 +135,104 @@
 /* Text gradient */
 .text-gradient {
   background: linear-gradient(135deg, #3B82F6 0%, #60A5FA 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-/* Animated underline */
-.animated-underline {
-  position: relative;
-}
-
-.animated-underline::after {
-  content: '';
-  position: absolute;
-  bottom: -2px;
-  left: 0;
-  width: 0;
-  height: 2px;
-  background: var(--primary);
-  transition: width 0.3s ease;
-}
-
-.animated-underline:hover::after {
-  width: 100%;
-}
-
-/* Floating animation */
-@keyframes float {
-  0%, 100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-}
-
-.animate-float {
-  animation: float 3s ease-in-out infinite;
-}
-
-/* Pulse glow animation */
-@keyframes pulse-glow {
-  0%, 100% {
-    box-shadow: 0 0 20px rgba(59, 130, 246, 0.25);
-  }
-  50% {
+  -webkit-background-clip: text; 
+  -webkit-text-fill-color: transparent; 
+  background-clip: text; 
+} 
+ 
+/* Animated underline */ 
+.animated-underline { 
+  position: relative; 
+} 
+ 
+.animated-underline::after { 
+  content: ''; 
+  position: absolute; 
+  bottom: -2px; 
+  left: 0; 
+  width: 0; 
+  height: 2px; 
+  background: var(--primary);  
+  transition: width 0.3s ease;  
+} 
+ 
+.animated-underline:hover::after { 
+  width: 100%; 
+} 
+ 
+/* Floating animation */ 
+@keyframes float { 
+  0%, 100% { 
+    transform: translateY(0px); 
+  } 
+  50% { 
+    transform: translateY(-10px); 
+  } 
+} 
+ 
+.animate-float { 
+  animation: float 3s ease-in-out infinite; 
+} 
+ 
+/* Pulse glow animation */ 
+@keyframes pulse-glow { 
+  0%, 100% { 
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.25); 
+  } 
+  50% { 
     box-shadow: 0 0 40px rgba(59, 130, 246, 0.5);
-  }
+  } 
+} 
+
+.animate-pulse-glow { 
+  animation: pulse-glow 2s ease-in-out infinite; 
+} 
+
+/* Alternating section backgrounds */
+.section-light {
+  background-color: var(--background);
 }
 
-.animate-pulse-glow {
-  animation: pulse-glow 2s ease-in-out infinite;
+.section-dark {
+  background-color: var(--card);
+}
+
+/* For Hero section */
+#hero {
+  background-color: var(--background);
+}
+
+/* About section */
+#about {
+  background-color: var(--card);
+}
+
+/* Experience section */
+#experience {
+  background-color: var(--background);
+}
+
+/* Skills section */
+#skills {
+  background-color: var(--card);
+}
+
+/* Projects section */
+#projects {
+  background-color: var(--background);
+}
+
+/* Services section */
+#services {
+  background-color: var(--card);
+}
+
+/* Education section */
+#education {
+  background-color: var(--background);
+}
+
+/* Contact section */
+#contact {
+  background-color: var(--card);
 }

@@ -1,282 +1,228 @@
 "use client"
 
-import { motion, AnimatePresence } from "framer-motion"
-import { Github, Linkedin, Mail, MapPin, Phone, ChevronDown } from "lucide-react"
+import { motion } from "framer-motion"
+import { Github, Linkedin, Mail, Download, ArrowDown } from "lucide-react"
 import Image from "next/image"
-import { useState, useEffect } from "react"
-import { Download } from "lucide-react"
 
-const ROLES = [
-  "Full Stack Developer",
-  "Freelancer",
-  "UI/UX Designer",
-  "Web Development",
-]
-
-function AnimatedRole() {
-  const [index, setIndex] = useState(0)
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setIndex((prev) => (prev + 1) % ROLES.length)
-    }, 2800)
-    return () => clearInterval(interval)
-  }, [])
-
-  return (
-    <div className="h-10 overflow-hidden relative">
-      <AnimatePresence mode="wait">
-        <motion.span
-          key={index}
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -30 }}
-          transition={{ duration: 0.45, ease: "easeInOut" }}
-          className="absolute inset-0 text-xl md:text-2xl font-semibold text-primary"
-        >
-          {ROLES[index]}
-        </motion.span>
-      </AnimatePresence>
-    </div>
-  )
-}
+const roles = ["Full Stack Developer", "Freelancer", "UI/UX Designer", "Web Developer"]
 
 export function HeroSection() {
-  const scrollToAbout = () => {
-    const element = document.getElementById("about")
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" })
-    }
-  }
-
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Animated Background */}
-      <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-primary/10 via-background to-background" />
-
-        {/* Floating orbs */}
+    <section id="hero" className="section-light min-h-screen flex items-center justify-center py-12 sm:py-20 lg:py-20 relative overflow-hidden">
+      {/* Background animation */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <motion.div
-          className="absolute top-1/4 left-1/4 w-64 h-64 rounded-full bg-primary/5 blur-3xl"
-          animate={{ x: [0, 50, 0], y: [0, 30, 0] }}
-          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute -top-40 -right-40 w-80 h-80 rounded-full bg-primary/10 blur-3xl"
+          animate={{
+            y: [0, 40, 0],
+            x: [0, 20, 0],
+          }}
+          transition={{
+            duration: 8,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
         />
         <motion.div
-          className="absolute bottom-1/4 right-1/4 w-96 h-96 rounded-full bg-primary/5 blur-3xl"
-          animate={{ x: [0, -40, 0], y: [0, -40, 0] }}
-          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-        />
-
-        {/* Grid pattern */}
-        <div
-          className="absolute inset-0 opacity-[0.02]"
-          style={{
-            backgroundImage: `linear-gradient(var(--foreground) 1px, transparent 1px),
-                              linear-gradient(90deg, var(--foreground) 1px, transparent 1px)`,
-            backgroundSize: "50px 50px",
+          className="absolute -bottom-40 -left-40 w-80 h-80 rounded-full bg-accent/10 blur-3xl"
+          animate={{
+            y: [0, -40, 0],
+            x: [0, -20, 0],
+          }}
+          transition={{
+            duration: 10,
+            repeat: Infinity,
+            ease: "easeInOut",
           }}
         />
       </div>
 
-      <div className="relative z-10 max-w-6xl mx-auto px-6 py-20">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 items-center">
           {/* Left Content */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-            className="space-y-6"
+            transition={{ duration: 0.8 }}
           >
+            {/* Greeting */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20"
+              className="mb-4 sm:mb-6"
             >
-              <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-              <span className="text-sm text-primary font-medium">Available for opportunities</span>
+              <p className="text-sm sm:text-base text-primary font-semibold">Welcome to my portfolio</p>
             </motion.div>
 
+            {/* Name */}
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
-              className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-balance"
+              className="text-4xl sm:text-4xl md:text-4xl font-bold text-foreground mb-4 sm:mb-6"
             >
-              <span className="text-foreground">Hi, I&apos;m </span><br />
-              <span className="text-foreground">Mya Htut Khaung</span>
+              Hi, I&apos;m <br /> Mya Htut Khaung
             </motion.h1>
 
+            {/* Animated Role */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
+              className="mb-3 sm:mb-3"
             >
-              <AnimatedRole />
+              <div className="text-2xl sm:text-3xl md:text-4xl font-bold h-12 sm:h-14 md:h-16">
+                <AnimatedRole roles={roles} />
+              </div>
             </motion.div>
 
-            <motion.div
+            {/* Description */}
+            <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
-              className="flex flex-wrap gap-3"
+              className="text-sm sm:text-base text-muted-foreground mb-6 sm:mb-8 max-w-lg"
             >
-              {["PHP", "Laravel", "React.JS", "Node.JS", "MySQL"].map((tech, index) => (
-                <motion.span
-                  key={tech}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.6 + index * 0.1 }}
-                  whileHover={{ scale: 1.05, y: -2 }}
-                  className="px-4 py-2 rounded-lg bg-secondary text-secondary-foreground text-sm font-medium border border-border hover:border-primary/50 transition-colors cursor-default"
-                >
-                  {tech}
-                </motion.span>
-              ))}
-            </motion.div>
+              I'm a <span className="text-primary">Full-Stack Web Developer</span> passionate about building modern, scalable, and high-performance web applications. I specialize in <span className="text-primary">PHP, Laravel, React.js, Node.js, and MySQL</span>, creating clean, maintainable, and user-centered digital solutions.
+            </motion.p>
 
+            {/* CTA Buttons */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.8 }}
-              className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground"
-            >
-              <span className="flex items-center gap-2">
-                <MapPin size={16} className="text-primary" />
-                Yangon, Myanmar
-              </span>
-              <span className="hidden sm:block w-1 h-1 rounded-full bg-muted-foreground" />
-              <span className="flex items-center gap-2">
-                <Phone size={16} className="text-primary" />
-                +959250899121
-              </span>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.9 }}
-              className="flex items-center gap-4 pt-4"
+              transition={{ delay: 0.6 }}
+              className="flex flex-col sm:flex-row gap-4 sm:gap-3 mb-6 sm:mb-6"
             >
               <motion.a
                 href="/cv/Mya_Htut_Khaung_CV.pdf"
                 download
-                className="inline-flex items-center gap-2 px-3 py-3 rounded-xl bg-primary text-primary-foreground font-medium"
+                target="_blank"
+                rel="noopener noreferrer"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="flex items-center justify-center gap-2 px-6 sm:px-8 py-3 sm:py-3 border-2 border-primary text-primary rounded-lg font-semibold hover:bg-primary/10 transition-all text-sm sm:text-base"
               >
                 <Download size={18} />
                 View Resume
               </motion.a>
-              <motion.a
-                href="https://github.com/myahtutkhaung2711"
-                target="_blank"
-                rel="noopener noreferrer"
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.95 }}
-                className="p-3 rounded-lg bg-secondary hover:bg-secondary/80 transition-colors"
-                aria-label="GitHub"
-              >
-                <Github size={20} />
-              </motion.a>
-              <motion.a
-                href="https://www.linkedin.com/in/mya-htut-khaung/"
-                target="_blank"
-                rel="noopener noreferrer"
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.95 }}
-                className="p-3 rounded-lg bg-secondary hover:bg-secondary/80 transition-colors"
-                aria-label="LinkedIn"
-              >
-                <Linkedin size={20} />
-              </motion.a>
+            </motion.div>
+
+            {/* Social Links */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.7 }}
+              className="flex gap-4 sm:gap-6"
+            >
+              {[
+                { Icon: Github, link: "https://github.com/myahtutkhaung2711", label: "GitHub" },
+                { Icon: Linkedin, link: "https://www.linkedin.com/in/mya-htut-khaung/", label: "LinkedIn" },
+                { Icon: Mail, link: "mailto:myahtutkhaung2711@gmail.com", label: "Email" },
+              ].map(({ Icon, link, label }) => (
+                <motion.a
+                  key={label}
+                  href={link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  whileHover={{ scale: 1.2, rotate: 5 }}
+                  className="p-3 bg-primary/10 rounded-lg text-primary hover:bg-primary/20 transition-all"
+                  aria-label={label}
+                >
+                  <Icon size={20} />
+                </motion.a>
+              ))}
             </motion.div>
           </motion.div>
 
-          {/* Right Content - Profile Photo */}
+          {/* Right Content - Profile Image */}
           <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-            className="hidden lg:flex justify-center"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.3 }}
+            className="flex justify-center"
           >
-            <ProfilePhoto />
+            <motion.div
+              animate={{ y: [0, -20, 0] }}
+              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+              className="relative"
+            >
+              <div className="relative w-64 h-64 sm:w-72 sm:h-72 md:w-96 md:h-96">
+                {/* Animated rings */}
+                <motion.div
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 20, repeat: Infinity, linear: true }}
+                  className="absolute inset-0 rounded-full border-2 border-transparent border-t-primary/50 border-r-primary/30"
+                />
+                <motion.div
+                  animate={{ rotate: -360 }}
+                  transition={{ duration: 25, repeat: Infinity, linear: true }}
+                  className="absolute inset-4 rounded-full border-2 border-transparent border-t-primary/30 border-r-primary/50"
+                />
+
+                {/* Profile Image */}
+                <div className="absolute inset-6 rounded-full overflow-hidden border-4 border-primary/20 bg-card">
+                  <Image
+                    src="/images/profile.jpg"
+                    alt="Mya Htut Khaung"
+                    fill
+                    className="object-cover"
+                    priority
+                  />
+                </div>
+
+                {/* Glow effect */}
+                <motion.div
+                  animate={{ opacity: [0.5, 1, 0.5] }}
+                  transition={{ duration: 3, repeat: Infinity }}
+                  className="absolute inset-0 rounded-full bg-gradient-to-br from-primary/20 to-transparent blur-2xl"
+                />
+              </div>
+            </motion.div>
           </motion.div>
         </div>
 
         {/* Scroll indicator */}
-        <motion.button
-          onClick={scrollToAbout}
-          initial={{ opacity: 0, y: 20 }}
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.2 }}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-muted-foreground hover:text-primary transition-colors"
+          transition={{ delay: 1 }}
+          className="absolute bottom-8 sm:bottom-12 left-1/2 transform -translate-x-1/2 text-center"
         >
-          <span className="text-sm">Scroll to explore</span>
-          <motion.div animate={{ y: [0, 8, 0] }} transition={{ duration: 1.5, repeat: Infinity }}>
-            <ChevronDown size={24} />
+          <motion.div
+            animate={{ y: [0, 10, 0] }}
+            transition={{ duration: 2, repeat: Infinity }}
+          >
+            <ArrowDown className="w-6 h-6 sm:w-8 sm:h-8 text-primary mx-auto mb-2" />
           </motion.div>
-        </motion.button>
+        </motion.div>
       </div>
     </section>
   )
 }
 
-function ProfilePhoto() {
+function AnimatedRole({ roles }: { roles: string[] }) {
+  const [currentRole, setCurrentRole] = React.useState(0)
+
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentRole((prev) => (prev + 1) % roles.length)
+    }, 2800)
+    return () => clearInterval(interval)
+  }, [roles.length])
+
   return (
     <motion.div
-      className="relative"
-      whileHover={{ scale: 1.02 }}
-      transition={{ type: "spring", stiffness: 300, damping: 20 }}
+      key={`${currentRole}-${roles[currentRole]}`}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -20 }}
+      transition={{ duration: 0.5 }}
+      className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent"
     >
-      {/* Rotating ring */}
-      <motion.div
-        className="absolute -inset-4 rounded-full border border-primary/20"
-        animate={{ rotate: 360 }}
-        transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-        style={{
-          background:
-            "conic-gradient(from 0deg, transparent 0%, transparent 70%, hsl(var(--primary) / 0.4) 100%)",
-        }}
-      />
-      <motion.div
-        className="absolute -inset-8 rounded-full border border-primary/10"
-        animate={{ rotate: -360 }}
-        transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-        style={{
-          background:
-            "conic-gradient(from 180deg, transparent 0%, transparent 80%, hsl(var(--primary) / 0.2) 100%)",
-        }}
-      />
-
-      {/* Photo container */}
-      <div className="relative w-72 h-80 rounded-2xl overflow-hidden border-2 border-primary/30 glow">
-        <Image
-          src="/images/profile.jpg"
-          alt="Mya Htut Khaung - Full Stack Developer"
-          fill
-          className="object-cover object-top"
-          priority
-        />
-        {/* Subtle overlay at bottom */}
-        <div className="absolute bottom-0 inset-x-0 h-20 bg-gradient-to-t from-background/60 to-transparent" />
-      </div>
-
-      {/* Floating badge */}
-      <motion.div
-        className="absolute -bottom-4 -right-4 px-4 py-2 rounded-xl bg-card border border-border shadow-lg"
-        animate={{ y: [0, -6, 0] }}
-        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-      >
-        <span className="text-xs font-medium text-primary">2+ Years Exp.</span>
-      </motion.div>
-
-      {/* Floating badge left */}
-      <motion.div
-        className="absolute -top-4 -left-4 px-3 py-2 rounded-xl bg-card border border-border shadow-lg"
-        animate={{ y: [0, 6, 0] }}
-        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-      >
-        <span className="text-xs font-medium text-primary">10+ Projects</span>
-      </motion.div>
+      {roles[currentRole]}
     </motion.div>
   )
 }
+
+import React from "react"

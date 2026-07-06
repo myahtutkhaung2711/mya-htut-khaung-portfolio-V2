@@ -1,147 +1,97 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { useInView } from "framer-motion"
-import { useRef } from "react"
-import { GraduationCap, Calendar, MapPin, Award } from "lucide-react"
+import { BookOpen, Calendar, Award } from "lucide-react"
+import { SectionHeader } from "./section-header"
 
-const education = [
+const educations = [
   {
-    degree: "BSc (Hons) Computing",
-    status: "On Going",
+    id: 1,
+    institution: "No.(2) Basic Education High School, Mingalardon Township",
+    qualification: "Academic High School Graduate",
+    duration: "2018 - 2019 Academic Year",
+    details: "Completed high school education with a 3 Distinction.",
+  },
+  {
+    id: 2,
     institution: "Twinkle College Myanmar (NCC Education)",
-    period: "2025 Oct - Present",
-    batch: "Batch-19",
-    description: "Currently pursuing BSc (Hons) Computing degree with NCC Education curriculum.",
-    highlight: true,
+    qualification: "BSc (Hons) Computing",
+    duration: "2025 Oct - Ongoing",
+    details: "Comprehensive study of computer science fundamentals and software development.",
   },
   {
-    degree: "Professional Web Development",
+    id: 3,
     institution: "Fairway Technology Myanmar",
-    period: "2023",
-    description: "Comprehensive training in full-stack web development including modern frameworks and best practices.",
-    highlight: true,
+    qualification: "Web Development Certificate",
+    duration: "2023",
+    details: "Professional training in full-stack web development and modern frameworks.",
   },
   {
-    degree: "UI/UX & Front-End Web Design",
+    id : 4,
     institution: "Fairway Technology Myanmar",
-    period: "2023",
-    description: "Focused training on user interface design, user experience principles, and front-end development.",
-    highlight: true,
-  },
-  {
-    degree: "Academic Year Graduate",
-    institution: "No (2), B.E.H.S Mingalardon",
-    period: "2018-2019 Academic Year",
-    description: "High school graduation with focus on mathematics and science.",
-    highlight: false,
-  },
+    qualification: "UI/UX & Frontend-End Web Design Certificate",
+    duration: "2023",
+    details: "Specialized training in user interface and user experience design principles.",
+  }
 ]
 
 export function EducationSection() {
-  const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, margin: "-100px" })
-
   return (
-    <section id="education" className="py-24 relative bg-card/30">
-      <div className="max-w-6xl mx-auto px-6" ref={ref}>
+    <section id="education" className="section-light py-16 sm:py-20 lg:py-24 relative overflow-hidden">
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="mb-12"
-        >
-          <span className="text-primary text-sm font-medium tracking-wider uppercase">Learning Journey</span>
-          <h2 className="text-3xl md:text-4xl font-bold mt-2 text-balance">Education & Training</h2>
-        </motion.div>
+          className="absolute -top-40 -right-40 w-80 h-80 rounded-full bg-primary/10 blur-3xl"
+          animate={{ y: [0, 40, 0] }}
+          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+        />
+      </div>
 
-        <div className="grid md:grid-cols-2 gap-6">
-          {education.map((edu, index) => (
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <SectionHeader
+          badge="Education"
+          badgeIcon={BookOpen}
+          subtitle="Continuous learning through formal education and professional certifications."
+        />
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+          {educations.map((edu, index) => (
             <motion.div
-              key={index}
+              key={edu.id}
               initial={{ opacity: 0, y: 30 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: 0.2 + index * 0.1 }}
-              whileHover={{ y: -4 }}
-              className={`group relative p-6 rounded-xl border transition-all ${
-                edu.highlight
-                  ? "bg-card border-primary/20 hover:border-primary/40"
-                  : "bg-card border-border hover:border-primary/30"
-              }`}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: index * 0.2 }}
+              viewport={{ once: true }}
+              whileHover={{ y: -8 }}
+              className="p-6 sm:p-8 rounded-xl border border-border hover:border-primary bg-card/50 hover:bg-card transition-all"
             >
-              {/* Highlight badge */}
-              {edu.highlight && (
-                <div className="absolute -top-3 right-4">
-                  <span className="px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium border border-primary/20">
-                    {edu.status || "Completed"}
-                  </span>
+              <div className="flex items-start justify-between mb-4">
+                <div>
+                  <h3 className="text-lg sm:text-xl font-bold text-foreground mb-1">
+                    {edu.qualification}
+                  </h3>
+                  <p className="text-sm sm:text-base text-primary font-semibold">
+                    {edu.institution}
+                  </p>
                 </div>
-              )}
-
-              {/* Icon */}
-              <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
-                <GraduationCap className="w-6 h-6 text-primary" />
+                <motion.div
+                  whileHover={{ rotate: 20 }}
+                  className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0"
+                >
+                  <Award className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
+                </motion.div>
               </div>
 
-              {/* Content */}
-              <h3 className="text-lg font-semibold text-foreground mb-1">{edu.degree}</h3>
-              <p className="text-primary font-medium text-sm mb-3">{edu.institution}</p>
-
-              <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
-                <Calendar size={14} />
-                <span>{edu.period}</span>
-                {edu.batch && (
-                  <>
-                    <span className="w-1 h-1 rounded-full bg-muted-foreground" />
-                    <span>{edu.batch}</span>
-                  </>
-                )}
+              <div className="flex items-center gap-2 mb-4 text-xs sm:text-sm text-muted-foreground">
+                <Calendar className="w-4 h-4 text-primary" />
+                {edu.duration}
               </div>
 
-              <p className="text-sm text-muted-foreground leading-relaxed">{edu.description}</p>
-
-              {/* Decorative corner */}
-              <div className="absolute bottom-0 right-0 w-16 h-16 bg-primary/5 rounded-tl-[40px] rounded-br-xl opacity-0 group-hover:opacity-100 transition-opacity" />
+              <p className="text-sm text-muted-foreground">
+                {edu.details}
+              </p>
             </motion.div>
           ))}
         </div>
-
-        {/* Certifications/Achievements */}
-        {/* <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, delay: 0.6 }}
-          className="mt-12 p-6 rounded-xl bg-card border border-border"
-        >
-          <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
-              <Award className="w-5 h-5 text-primary" />
-            </div>
-            <h3 className="text-lg font-semibold">Key Achievements</h3>
-          </div>
-
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {[
-              "NCC Education BSc Computing Student",
-              "Fairway Technology Graduate",
-              "2+ Years Professional Experience",
-              "Corporate & Freelance Projects",
-              "Full Stack Development Skills",
-              "Continuous Learning Mindset",
-            ].map((achievement, index) => (
-              <motion.div
-                key={achievement}
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={isInView ? { opacity: 1, scale: 1 } : {}}
-                transition={{ duration: 0.3, delay: 0.7 + index * 0.05 }}
-                className="flex items-center gap-3 p-3 rounded-lg bg-secondary/50"
-              >
-                <div className="w-2 h-2 rounded-full bg-primary flex-shrink-0" />
-                <span className="text-sm text-foreground">{achievement}</span>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div> */}
       </div>
     </section>
   )

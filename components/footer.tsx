@@ -33,7 +33,7 @@ export function Footer() {
             transition={{ duration: 0.5, delay: 0.1 }}
             className="flex flex-wrap justify-center gap-6"
           >
-            {["About", "Experience", "Skills", "Projects", "Education", "Contact"].map((link) => (
+            {["About", "Experience", "Skills", "Projects", "Services","Education", "Contact"].map((link) => (
               <a
                 key={link}
                 href={`#${link.toLowerCase()}`}
@@ -85,7 +85,7 @@ export function Footer() {
         >
           <p className="text-sm text-bold-foreground flex items-center justify-center gap-1">
             © {currentYear} Mya Htut Khaung. Built with{" "}
-            <Heart size={15} className="text-foreground outline-primary " /> using <span className="text-bold-foreground">Next.JS & React</span>
+            <Heart size={17} className="text-red-500 inline" /> By <span className="text-bold-foreground">Me</span>
           </p>
         </motion.div>
       </div>

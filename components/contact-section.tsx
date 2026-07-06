@@ -2,6 +2,7 @@
 
 import { useState, useRef } from "react"
 import { motion, useInView, AnimatePresence } from "framer-motion"
+import { SectionHeader } from "./section-header"
 import emailjs from "@emailjs/browser"
 import {
   Mail,
@@ -152,23 +153,11 @@ export function ContactSection() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6" ref={sectionRef}>
 
         {/* Heading */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-12"
-        >
-          <span className="text-primary text-sm font-medium tracking-wider uppercase">
-            Get In Touch
-          </span>
-          <h2 className="text-3xl md:text-4xl font-bold mt-2 text-balance">
-            {"Let's"} Work Together
-          </h2>
-          <p className="text-muted-foreground mt-4 max-w-2xl mx-auto text-pretty">
-            I&apos;m always open to discussing new projects, creative ideas, or opportunities.
-            Send me a message and I&apos;ll get back to you as soon as possible.
-          </p>
-        </motion.div>
+        <SectionHeader
+          badge="Get In Touch"
+          badgeIcon={Mail}
+          subtitle="Have a project in mind? Let's collaborate."
+        />
 
         <div className="grid lg:grid-cols-2 gap-10 items-start">
 
@@ -262,9 +251,9 @@ export function ContactSection() {
                     href={s.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    whileHover={{ scale: 1.1, y: -2 }}
+                    whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    className="flex items-center gap-2 px-4 py-3 rounded-xl bg-card border border-border hover:border-primary/40 hover:bg-primary/5 transition-all duration-200 text-sm font-medium"
+                    className="flex items-center justify-center gap-2 px-6 sm:px-8 py-3 sm:py-3 border-2 border-primary text-primary rounded-lg font-semibold hover:bg-primary/10 transition-all text-sm sm:text-base"
                     aria-label={s.label}
                   >
                     <s.icon className="w-5 h-5" />
@@ -370,15 +359,14 @@ export function ContactSection() {
               <motion.button
                 type="submit"
                 disabled={status === "loading"}
-                whileHover={status !== "loading" ? { scale: 1.02, y: -1 } : {}}
-                whileTap={status !== "loading" ? { scale: 0.98 } : {}}
-                className="w-full flex items-center justify-center gap-2 px-6 py-3.5 rounded-lg font-semibold text-sm transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed"
-                style={{ backgroundColor: "var(--primary)", color: "var(--primary-foreground)" }}
+                whileHover={status !== "loading" ? { scale: 1.05 } : {}}
+                whileTap={status !== "loading" ? { scale: 0.95 } : {}}
+                className="w-full flex items-center justify-center gap-2 px-6 py-3 border-2 border-primary text-primary rounded-lg font-semibold hover:bg-primary/10 transition-all duration-200 text-sm disabled:opacity-60 disabled:cursor-not-allowed"
               >
                 {status === "loading" ? (
                   <>
                     <Loader2 className="w-4 h-4 animate-spin" />
-                    Sending…
+                    Sending...
                   </>
                 ) : (
                   <>
