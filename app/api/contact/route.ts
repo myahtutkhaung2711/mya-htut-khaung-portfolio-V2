@@ -4,6 +4,13 @@ import { contactSchema } from "@/lib/validation";
 import { ContactEmail } from "@/emails/contact-email";
 
 export async function POST(request: Request) {
+  if (!process.env.RESEND_API_KEY) {
+    return NextResponse.json(
+      { message: "RESEND_API_KEY is not configured." },
+      { status: 500 }
+    );
+  }
+
   try {
     const body = await request.json();
 
