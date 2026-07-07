@@ -295,7 +295,7 @@ Full Stack Web Developer | UI/UX Designer
 
 GitHub: https://github.com/myahtutkhaung2711
 
-LinkedIn: https://linkedin.com/in/yourprofile
+LinkedIn: https://www.linkedin.com/in/mya-htut-khaung/
 
 ---
 
