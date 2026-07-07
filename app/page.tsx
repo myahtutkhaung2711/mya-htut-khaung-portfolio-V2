@@ -12,6 +12,13 @@ import { Footer } from "@/components/footer"
 export const metadata = {
   title: "Mya Htut Khaung | Full Stack Developer",
   description: "Portfolio of Mya Htut Khaung - Full Stack Developer specializing in PHP/Laravel, React.js, Node.js, and MySQL.",
+  keywords: ["Full Stack Developer", "Web Developer", "PHP", "Laravel", "React.js", "Node.js", "MySQL", "Myanmar"],
+  authors: [{ name: "Mya Htut Khaung" }],
+  icons: {
+    icon: "/images/terminal.svg",
+    shortcut: "/images/terminal.svg",
+    apple: "/images/terminal.png",
+  },
   openGraph: {
     title: "Mya Htut Khaung | Full Stack Developer",
     description: "Portfolio of Mya Htut Khaung - Full Stack Developer",

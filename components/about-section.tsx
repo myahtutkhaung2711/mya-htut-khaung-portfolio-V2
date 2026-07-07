@@ -46,24 +46,27 @@ export function AboutSection() {
             viewport={{ once: true }}
             className="flex justify-center"
           >
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              className="relative w-full max-w-sm"
-            >
-              <div className="relative w-65 h-75 md:w-85 md:h-100 rounded-2xl overflow-hidden border border-border shadow-2xl">
-                <Image
-                  src="/images/mhk_profile.jpg"
-                  alt="Mya Htut Khaung"
-                  fill
-                  className="object-cover object-fit"
-                />
-              </div>
+            <div className="flex justify-center md:justify-start">
               <motion.div
-                animate={{ opacity: [0.5, 1, 0.5] }}
-                transition={{ duration: 3, repeat: Infinity }}
-                className="absolute inset-0 rounded-2xl bg-gradient-to-br from-primary/20 to-transparent blur-2xl -z-10"
-              />
-            </motion.div>
+                whileHover={{ scale: 1.05 }}
+                className="relative w-full max-w-sm"
+              >
+                <div className="relative w-65 h-75 md:w-85 md:h-100 rounded-2xl overflow-hidden border border-border shadow-2xl">
+                  <Image
+                    src="/images/mhk_profile.jpg"
+                    alt="Mya Htut Khaung"
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+
+                <motion.div
+                  animate={{ opacity: [0.5, 1, 0.5] }}
+                  transition={{ duration: 3, repeat: Infinity }}
+                  className="absolute inset-0 rounded-2xl bg-gradient-to-br from-primary/20 to-transparent blur-2xl -z-10"
+                />
+              </motion.div>
+            </div>
           </motion.div>
 
           {/* Right - Content */}

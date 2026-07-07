@@ -1,9 +1,9 @@
 "use client"
-
+import { Resend } from "resend"
 import { useState, useRef } from "react"
 import { motion, useInView, AnimatePresence } from "framer-motion"
+
 import { SectionHeader } from "./section-header"
-import emailjs from "@emailjs/browser"
 import {
   Mail,
   Phone,
@@ -17,30 +17,23 @@ import {
   Loader2,
 } from "lucide-react"
 
-// ─── EmailJS config ──────────────────────────────────────────────────────────
-// Replace these three values with your own EmailJS credentials:
-//   Service ID  → https://dashboard.emailjs.com/admin
-//   Template ID → https://dashboard.emailjs.com/admin/templates
-//   Public Key  → https://dashboard.emailjs.com/admin/account
-const EMAILJS_SERVICE_ID  = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID  ?? "YOUR_SERVICE_ID"
-const EMAILJS_TEMPLATE_ID = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID ?? "YOUR_TEMPLATE_ID"
-const EMAILJS_PUBLIC_KEY  = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY  ?? "YOUR_PUBLIC_KEY"
-
 // ─── Types ────────────────────────────────────────────────────────────────────
 type Status = "idle" | "loading" | "success" | "error"
 
 interface FormFields {
-  from_name: string
-  from_email: string
+  name: string
+  email: string
   subject: string
   message: string
+  company: string
 }
 
 const EMPTY_FORM: FormFields = {
-  from_name: "",
-  from_email: "",
+  name: "",
+  email: "",
   subject: "",
   message: "",
+  company: "",
 }
 
 // ─── Input component ──────────────────────────────────────────────────────────
@@ -87,7 +80,6 @@ const inputClass =
 // ─── Main component ───────────────────────────────────────────────────────────
 export function ContactSection() {
   const sectionRef = useRef<HTMLDivElement>(null)
-  const formRef    = useRef<HTMLFormElement>(null)
   const isInView   = useInView(sectionRef, { once: true, margin: "-100px" })
 
   const [fields, setFields] = useState<FormFields>(EMPTY_FORM)
@@ -97,10 +89,10 @@ export function ContactSection() {
   // ── Validation ──────────────────────────────────────────────────────────────
   function validate(): boolean {
     const next: Partial<FormFields> = {}
-    if (!fields.from_name.trim())                        next.from_name  = "Full name is required."
-    if (!fields.from_email.trim())                       next.from_email = "Email address is required."
-    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(fields.from_email))
-                                                         next.from_email = "Please enter a valid email."
+    if (!fields.name.trim())                        next.name  = "Full name is required."
+    if (!fields.email.trim())                       next.email = "Email address is required."
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(fields.email))
+                                                         next.email = "Please enter a valid email."
     if (!fields.subject.trim())                          next.subject    = "Subject is required."
     if (!fields.message.trim())                          next.message    = "Message cannot be empty."
     else if (fields.message.trim().length < 10)          next.message    = "Message must be at least 10 characters."
@@ -120,31 +112,42 @@ export function ContactSection() {
 
   // ── Submit ──────────────────────────────────────────────────────────────────
   async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    if (!validate()) return
+      e.preventDefault()
 
-    setStatus("loading")
+      if(!validate()) return
+      
+      setStatus("loading")
 
-    try {
-      await emailjs.send(
-        EMAILJS_SERVICE_ID,
-        EMAILJS_TEMPLATE_ID,
-        {
-          from_name:  fields.from_name,
-          from_email: fields.from_email,
-          subject:    fields.subject,
-          message:    fields.message,
-          to_email:   "myahtutkhaung2002@gmail.com",
-        },
-        { publicKey: EMAILJS_PUBLIC_KEY },
-      )
-      setStatus("success")
-      setFields(EMPTY_FORM)
-      setTimeout(() => setStatus("idle"), 5000)
-    } catch {
-      setStatus("error")
-      setTimeout(() => setStatus("idle"), 5000)
-    }
+      try {
+        const response = await fetch("/api/contact", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(fields),
+        })
+
+        const data = await response.json()
+
+        if (!response.ok) {
+          throw new Error(data.message || "Something went wrong.")
+        }
+
+        setStatus("success")
+        setFields(EMPTY_FORM)
+
+        setTimeout(() => {
+          setStatus("idle")
+        }, 4000)
+      } catch (error) {
+        console.error(error)
+
+        setStatus("error")
+
+        setTimeout(() => {
+          setStatus("idle")
+        }, 4000)
+      }
   }
 
   // ── Render ──────────────────────────────────────────────────────────────────
@@ -302,32 +305,40 @@ export function ContactSection() {
               )}
             </AnimatePresence>
 
-            <form ref={formRef} onSubmit={handleSubmit} noValidate className="space-y-4">
+            <form onSubmit={handleSubmit} noValidate className="space-y-4">
 
               <div className="grid sm:grid-cols-2 gap-4">
-                <Field label="Full Name" id="from_name" error={errors.from_name}>
+                <Field label="Full Name" id="name" error={errors.name}>
                   <input
                     type="text"
-                    id="from_name"
-                    name="from_name"
-                    value={fields.from_name}
+                    id="name"
+                    name="name"
+                    value={fields.name}
                     onChange={handleChange}
                     placeholder="John Doe"
                     autoComplete="name"
-                    className={`${inputClass} ${errors.from_name ? "border-destructive focus:border-destructive focus:ring-destructive/20" : ""}`}
+                    className={`${inputClass} ${
+                      errors.name
+                        ? "border-destructive focus:border-destructive focus:ring-destructive/20"
+                        : ""
+                    }`}
                   />
                 </Field>
 
-                <Field label="Email Address" id="from_email" error={errors.from_email}>
+                <Field label="Email Address" id="email" error={errors.email}>
                   <input
                     type="email"
-                    id="from_email"
-                    name="from_email"
-                    value={fields.from_email}
+                    id="email"
+                    name="email"
+                    value={fields.email}
                     onChange={handleChange}
                     placeholder="john@example.com"
                     autoComplete="email"
-                    className={`${inputClass} ${errors.from_email ? "border-destructive focus:border-destructive focus:ring-destructive/20" : ""}`}
+                    className={`${inputClass} ${
+                      errors.email
+                        ? "border-destructive focus:border-destructive focus:ring-destructive/20"
+                        : ""
+                    }`}
                   />
                 </Field>
               </div>
@@ -351,10 +362,22 @@ export function ContactSection() {
                   rows={5}
                   value={fields.message}
                   onChange={handleChange}
+                  disabled={status === "loading"}
                   placeholder="Tell me about your project or idea..."
                   className={`${inputClass} resize-none ${errors.message ? "border-destructive focus:border-destructive focus:ring-destructive/20" : ""}`}
                 />
               </Field>
+
+              <input
+                type="text"
+                name="company"
+                value={fields.company}
+                onChange={handleChange}
+                autoComplete="off"
+                tabIndex={-1}
+                disabled={status === "loading"}
+                className="hidden"
+              />
 
               <motion.button
                 type="submit"
@@ -377,12 +400,13 @@ export function ContactSection() {
               </motion.button>
 
               <p className="text-xs text-muted-foreground text-center">
-                Your message will be delivered directly to my inbox.
+                I'll usually reply within 24 hours. Thank you for reaching out!
               </p>
             </form>
           </motion.div>
         </div>
       </div>
     </section>
+    
   )
 }

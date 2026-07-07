@@ -18,9 +18,9 @@ export const metadata: Metadata = {
   title: 'Mya Htut Khaung | Full Stack Web Developer',
   description: 'Full Stack Web Developer specializing in PHP, Laravel, React.js, Node.js, and MySQL. Building responsive and user-friendly web applications.',
   icons: {
-    icon: '/favicon.svg',
-    shortcut: '/favicon.svg',
-    apple: '/favicon.png',
+    icon: "/images/terminal.svg",
+    shortcut: "/images/terminal.svg",
+    apple: "/images/terminal.png",
   },
   keywords: ['Full Stack Developer', 'Web Developer', 'PHP', 'Laravel', 'React.js', 'Node.js', 'MySQL', 'Myanmar'],
   authors: [{ name: 'Mya Htut Khaung' }],

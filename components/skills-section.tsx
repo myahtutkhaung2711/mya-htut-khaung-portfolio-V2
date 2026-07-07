@@ -120,8 +120,8 @@ export function SkillsSection() {
               whileTap={{ scale: 0.98 }}
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                 activeCategory === index
-                  ? "bg-primary text-primary-foreground"
-                  : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
+                  ? "bg-primary text-primary-secondary-foreground"
+                  : "border-2 border-primary text-primary text-primary hover:bg-secondary/80"
               }`}
             >
               {category.name}

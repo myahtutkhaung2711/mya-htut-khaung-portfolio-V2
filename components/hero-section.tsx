@@ -8,7 +8,7 @@ const roles = ["Full Stack Developer", "Freelancer", "UI/UX Designer", "Web Deve
 
 export function HeroSection() {
   return (
-    <section id="hero" className="section-light min-h-screen flex items-center justify-center py-12 sm:py-20 lg:py-20 relative overflow-hidden">
+    <section id="hero" className="section-light min-h-screen flex items-center justify-center py-23 sm:py-20 lg:py-20 relative overflow-hidden">
       {/* Background animation */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <motion.div
