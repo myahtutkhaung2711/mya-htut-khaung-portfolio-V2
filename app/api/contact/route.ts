@@ -31,7 +31,7 @@ export async function POST(request: Request) {
     const { name, email, subject, message } = result.data;
 
     const response = await resend.emails.send({
-      from: "Mya Htut Khaung <contact@myahtutkhaung.dev>"
+      from: "Mya Htut Khaung <contact@myahtutkhaung.dev>",
       to: process.env.CONTACT_EMAIL!,
       replyTo: email,
       subject: `📩 ${subject}`,
