@@ -69,6 +69,17 @@ export function SkillsSection() {
           subtitle="Proficient in modern technologies and frameworks."
         />
 
+        {/* Tech Stack Badges */}
+        <motion.div
+          ref={ref}
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="flex flex-wrap gap-3"
+        >
+          
+        </motion.div>
+
         {/* Category Tabs */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
