@@ -45,17 +45,6 @@ const skillCategories = [
   },
 ]
 
-const techStack = [
-  { name: "PHP", color: "from-indigo-500 to-purple-500" },
-  { name: "Laravel", color: "from-red-500 to-orange-500" },
-  { name: "React.js", color: "from-cyan-500 to-blue-500" },
-  { name: "Node.js", color: "from-green-500 to-emerald-500" },
-  { name: "MySQL", color: "from-blue-500 to-cyan-500" },
-  { name: "JavaScript", color: "from-yellow-500 to-orange-500" },
-  { name: "HTML5", color: "from-orange-500 to-red-500" },
-  { name: "CSS3", color: "from-blue-500 to-indigo-500" },
-]
-
 export function SkillsSection() {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: "-100px" })
@@ -79,31 +68,6 @@ export function SkillsSection() {
           badgeIcon={Zap}
           subtitle="Proficient in modern technologies and frameworks."
         />
-
-        {/* Tech Stack Badges */}
-        <motion.div
-          ref={ref}
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="flex flex-wrap gap-3 mb-12"
-        >
-          {techStack.map((tech, index) => (
-            <motion.div
-              key={tech.name}
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={isInView ? { opacity: 1, scale: 1 } : {}}
-              transition={{ duration: 0.3, delay: 0.3 + index * 0.05 }}
-              whileHover={{ scale: 1.05, y: -2 }}
-              className="relative group cursor-default"
-            >
-              <div className={`absolute inset-0 bg-gradient-to-r ${tech.color} rounded-lg blur-sm opacity-30 group-hover:opacity-50 transition-opacity`} />
-              <div className="relative px-4 py-2 rounded-lg bg-card border border-border text-sm font-medium">
-                {tech.name}
-              </div>
-            </motion.div>
-          ))}
-        </motion.div>
 
         {/* Category Tabs */}
         <motion.div
