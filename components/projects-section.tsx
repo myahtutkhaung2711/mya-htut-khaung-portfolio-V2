@@ -37,6 +37,26 @@ const projects = [
   },
   {
     id: 4,
+    title: "eJLS - E-Learning Japanese Language School",
+    description: "Full Stack E-Learning Website for Japanese Language School with Admin Panel for managing courses and students",
+    image: "project/ejls_project.png",
+    technologies: ["PHP", "Laravel", "MySQL", "Bootstrap", "JavaScript"],
+    demoLink: "https://ejlslearning.edu.mm/",
+    githubLink: "#",
+    category: "Previous Work (Full Stack Development)",
+  },
+  {
+    id: 5,
+    title: "WILLTEC MYANMAR - Company Website",
+    description: "Company website for WILLTEC MYANMAR - Frontend Design and Full Stack Development with Admin Panel for managing content",
+    image: "project/willtec_project.png",
+    technologies: ["PHP", "Laravel", "MySQL", "Bootstrap", "JavaScript"],
+    demoLink: "https://www.willtec-myanmar.com/",
+    githubLink: "#",
+    category: "Previous Work (Full Stack Development)",
+  },
+  {
+    id: 6,
     title: "School Project - FEWD (Bean Boutique - Coffee Shop)",
     description: "A responsive coffee shop website built as a school project",
     image: "project/Coffee_Bean_Project.png",
@@ -45,26 +65,6 @@ const projects = [
     githubLink: "https://github.com/myahtutkhaung2711/Coffee-Bean-Frontend-Design",
     category: "Frontend Design",
   },
-  {
-    id: 5,
-    title: "School Project - Database (Database Design and Optimization)",
-    description: "A database design and optimization project for a school assignment",
-    image: "project/project_coming_soon.jpg",
-    technologies: ["MySQL", "StarUML", "Data Dictionary & Normalization"],
-    demoLink: "#",
-    githubLink: "#",
-    category: "Database Design",
-  },
-  // {
-  //   id: 7,
-  //   title: "Database Optimization",
-  //   description: "Query optimization and database architecture",
-  //   image: "project/project_coming_soon.jpg",
-  //   technologies: ["MySQL", "PostgreSQL", "Redis", "Optimization"],
-  //   demoLink: "#",
-  //   githubLink: "https://github.com/myahtutkhaung2711",
-  //   category: "Database Design",
-  // },
 ]
 
 export function ProjectsSection() {
