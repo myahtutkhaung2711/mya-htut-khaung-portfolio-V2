@@ -157,6 +157,26 @@ export function ProjectsSection() {
                     </motion.span>
                   ))}
                 </div>
+
+                {/* Buttons */}
+                <div className="flex gap-2">
+                  <motion.a
+                    href={project.demoLink}
+                    whileHover={{ scale: 1.05 }}
+                    className="flex-1 flex items-center justify-center gap-1 px-3 py-2 bg-primary text-foreground rounded text-xs sm:text-sm font-semibold hover:shadow-lg hover:shadow-primary/40 transition-all"
+                  >
+                    <ExternalLink size={14} />
+                    Demo
+                  </motion.a>
+                  <motion.a
+                    href={project.githubLink}
+                    whileHover={{ scale: 1.05 }}
+                    className="flex-1 flex items-center justify-center gap-1 px-3 py-2 border border-primary text-primary rounded text-xs sm:text-sm font-semibold hover:bg-primary/10 transition-all"
+                  >
+                    <Github size={14} />
+                    Code
+                  </motion.a>
+                </div>
                 
               </div>
             </motion.div>
