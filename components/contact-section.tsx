@@ -1,5 +1,4 @@
 "use client"
-import { Resend } from "resend"
 import { useState, useRef } from "react"
 import { motion, useInView, AnimatePresence } from "framer-motion"
 
@@ -111,43 +110,55 @@ export function ContactSection() {
   }
 
   // ── Submit ──────────────────────────────────────────────────────────────────
-  async function handleSubmit(e: React.FormEvent) {
-      e.preventDefault()
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault()
 
-      if(!validate()) return
-      
-      setStatus("loading")
+    if (!validate()) return
 
-      try {
-        const response = await fetch("/api/contact", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(fields),
-        })
+    // Honeypot protection
+    if (fields.company.trim()) {
+      return
+    }
 
-        const data = await response.json()
+    setStatus("loading")
 
-        if (!response.ok) {
-          throw new Error(data.message || "Something went wrong.")
-        }
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: fields.name,
+          email: fields.email,
+          subject: fields.subject,
+          message: fields.message,
+        }),
+      })
 
-        setStatus("success")
-        setFields(EMPTY_FORM)
+      const data = await response.json()
 
-        setTimeout(() => {
-          setStatus("idle")
-        }, 4000)
-      } catch (error) {
-        console.error(error)
-
-        setStatus("error")
-
-        setTimeout(() => {
-          setStatus("idle")
-        }, 4000)
+      if (!response.ok) {
+        throw new Error(
+          data.message || "Failed to send a message."
+        )
       }
+
+      setStatus("success")
+      setFields(EMPTY_FORM)
+
+      setTimeout(() => {
+        setStatus("idle")
+      }, 5000)
+    } catch (error) {
+      console.error("Contact form error:", error)
+
+      setStatus("error")
+
+      setTimeout(() => {
+        setStatus("idle")
+      }, 5000)
+    }
   }
 
   // ── Render ──────────────────────────────────────────────────────────────────
@@ -332,7 +343,7 @@ export function ContactSection() {
                     name="email"
                     value={fields.email}
                     onChange={handleChange}
-                    placeholder="john@example.com"
+                    placeholder="john@gmail.com"
                     autoComplete="email"
                     className={`${inputClass} ${
                       errors.email
@@ -350,7 +361,7 @@ export function ContactSection() {
                   name="subject"
                   value={fields.subject}
                   onChange={handleChange}
-                  placeholder="Project inquiry / Freelance work / Say hi"
+                  placeholder="Project inquiry / Freelance work"
                   className={`${inputClass} ${errors.subject ? "border-destructive focus:border-destructive focus:ring-destructive/20" : ""}`}
                 />
               </Field>

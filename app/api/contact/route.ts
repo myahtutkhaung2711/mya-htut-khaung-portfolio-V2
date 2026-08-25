@@ -1,84 +1,86 @@
-import { NextResponse } from "next/server";
-import { resend } from "@/lib/resend";
-import { contactSchema } from "@/lib/validation";
-import { ContactEmail } from "@/emails/contact-email";
+import { NextResponse } from "next/server"
+import nodemailer from "nodemailer"
 
 export async function POST(request: Request) {
-  if (!process.env.RESEND_API_KEY) {
-    return NextResponse.json(
-      { message: "RESEND_API_KEY is not configured." },
-      { status: 500 }
-    );
-  }
-
   try {
-    const body = await request.json();
+    const body = await request.json()
 
-    // Honeypot (spam protection)
-    if (body.company && body.company.trim() !== "") {
-      return NextResponse.json(
-        { message: "Spam detected." },
-        { status: 400 }
-      );
-    }
+    console.log("Contact form received:", body)
 
-    // Validate request
-    const result = contactSchema.safeParse(body);
+    const {
+      name,
+      email,
+      subject,
+      message,
+    } = body
 
-    if (!result.success) {
+    if (
+      !name?.trim() ||
+      !email?.trim() ||
+      !subject?.trim() ||
+      !message?.trim()
+    ) {
       return NextResponse.json(
         {
-          message: "Validation failed.",
-          errors: result.error.flatten().fieldErrors,
+          success: false,
+          message: "All fields are required.",
         },
         { status: 400 }
-      );
+      )
     }
 
-    const { name, email, subject, message } = result.data;
-
-    const response = await resend.emails.send({
-      from: "Mya Htut Khaung <contact@myahtutkhaung.dev>",
-      to: process.env.CONTACT_EMAIL!,
-      replyTo: email,
-      subject: `📩 ${subject}`,
-      text: `
-    Name: ${name}
-    Email: ${email}
-
-    ${message}
-      `,
-    });
-
-    if (response.error) {
-      console.error(response.error);
+    if (!process.env.GMAIL_USER || !process.env.GMAIL_APP_PASSWORD) {
+      console.error("Gmail environment variables are missing.")
 
       return NextResponse.json(
         {
-          message: "Unable to send email.",
+          success: false,
+          message: "Email server is not configured.",
         },
         { status: 500 }
-      );
+      )
     }
 
-    return NextResponse.json(
-      {
-        message: "Message sent successfully.",
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.GMAIL_USER,
+        pass: process.env.GMAIL_APP_PASSWORD,
       },
-      {
-        status: 200,
-      }
-    );
+    })
+
+    await transporter.sendMail({
+      from: process.env.GMAIL_USER,
+      to: process.env.CONTACT_EMAIL || process.env.GMAIL_USER,
+      replyTo: email,
+      subject: `Portfolio Contact: ${subject}`,
+      text: 
+      ` You received a new message from your portfolio.
+
+      Name: ${name}
+      Email: ${email}
+      Subject: ${subject}
+
+      Message:
+      ${message}
+
+      --------------------------------
+      Sent from my portfolio contact form `,
+    })
+
+    return NextResponse.json({
+      success: true,
+      message: "Message sent successfully.",
+    })
   } catch (error) {
-    console.error(error);
+    console.error("Contact API error:", error)
 
     return NextResponse.json(
       {
-        message: "Internal server error.",
+        success: false,
+        message: "Failed to send the message.",
       },
-      {
-        status: 500,
-      }
-    );
+      { status: 500 }
+    )
   }
 }

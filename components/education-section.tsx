@@ -17,21 +17,35 @@ const educations = [
     institution: "Twinkle College Myanmar (NCC Education)",
     qualification: "BSc (Hons) Computing",
     duration: "2025 Oct - Ongoing",
-    details: "Comprehensive study of computer science fundamentals and software development.",
+    details: "A comprehensive study of software development, programming, databases, networking, systems analysis and design, software engineering, and modern computing technologies.",
   },
   {
     id: 3,
     institution: "Fairway Technology Myanmar",
-    qualification: "Web Development Certificate",
+    qualification: "Programming Basic Course - Certificate",
     duration: "2023",
-    details: "Professional training in full-stack web development and modern frameworks.",
+    details: "Introduction to Command Line Interface, Programming with Java & Python and HTML/CSS/JavaScript, Object-Oriented Programming (OOP) and Database Programming (SQL)",
   },
   {
-    id : 4,
+    id: 4,
     institution: "Fairway Technology Myanmar",
-    qualification: "UI/UX & Frontend-End Web Design Certificate",
+    qualification: "Professional Web Developer Course - Certificate",
     duration: "2023",
-    details: "Specialized training in user interface and user experience design principles.",
+    details: "Professional in Web Standards, HTML/CSS, JavaScript, Bootstrapk, PHP/MySQL, Laravel Framework",
+  },
+  {
+    id : 5,
+    institution: "Fairway Technology Myanmar",
+    qualification: "Professioanl Web UI/UX & Frontend-End Design Course - Certificate",
+    duration: "2023",
+    details: "Specialized in Figma, Color Theory, Priciple of Web Design, UI/UX for Web Design, Grid System for Web Design, HTML, CSS, JavaScript and Bootstrap Framework",
+  },
+  {
+    id : 6,
+    institution: "Fairway Technology Myanmar",
+    qualification: "Rockstar Developer Course - Certificate",
+    duration: "2024",
+    details: "Specialized in Node.js, Express.js, MongoDB, React, React Native, Redux, Next.js",
   }
 ]
 

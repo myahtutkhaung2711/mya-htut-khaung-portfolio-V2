@@ -19,7 +19,7 @@ const projects = [
     id: 2,
     title: "E-commerce Website (Online Shopping)",
     description: "An e-commerce website with product listings, shopping cart, and checkout functionality",
-    image: "project/project_coming_soon.jpg",
+    image: "project/ecommarce_project.png",
     technologies: ["PHP", "Laravel", "MySQL", "Bootstrap", "JavaScript"],
     demoLink: "#",
     githubLink: "https://github.com/myahtutkhaung2711/ecommerce_app",
